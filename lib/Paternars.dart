@@ -13,6 +13,7 @@ class _PaternarsState extends State<Paternars> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: DefaultTabController(
         length: 3, 
         child: Column(
@@ -45,7 +46,7 @@ class _PaternarsState extends State<Paternars> {
                         ),
                         child: const Align(
                           alignment: Alignment.center,
-                          child: Text("Produits"),
+                          child: Text("Clients"),
                         ),
                       ),
                     ),
@@ -60,7 +61,7 @@ class _PaternarsState extends State<Paternars> {
                         ),
                         child: const Align(
                           alignment: Alignment.center,
-                          child: Text("Categories"),
+                          child: Text("Fournisseurs"),
                         ),
                       ),
                     ),
