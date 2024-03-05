@@ -58,7 +58,7 @@ class _AllproductState extends State<Allproduct> {
                                                   width: width*0.91,
                                                   decoration: BoxDecoration(
                                                     color: Colors.white,
-                                                    borderRadius: BorderRadius.circular(0.0),
+                                                    borderRadius: BorderRadius.circular(10.0),
                                                     boxShadow: [
                                                       BoxShadow(
                                                           color: Colors.grey.withOpacity(0.3),

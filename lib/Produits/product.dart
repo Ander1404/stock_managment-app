@@ -1,9 +1,9 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:stocktrue/Produits/Categorie/home/HomeCat.dart';
 
 import 'Allproduct.dart';
-import 'Categorie/CatProduit.dart';
 //import 'package:google_fonts/google_fonts.dart';
 //import 'package:stock/Produits/Gest.dart';
 
