@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../Hero/hero_details.dart';
 import '../Hero/hero_info.dart';
 import 'Addclient.dart';
@@ -11,14 +10,16 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = HeroItems();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Clients"),
-      ),
+      // appBar: AppBar(
+      //   title: const Text("Clients"),
+      // ),
       body: ListView.builder(
-        padding: EdgeInsets.all(10),
+        
+        padding: const EdgeInsets.all(10),
           itemCount: controller.items.length,
           itemBuilder: (context,index){
             return ListTile(
+              
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
               },                
@@ -47,7 +48,7 @@ class Home extends StatelessWidget {
           }),
       floatingActionButton: FloatingActionButton(
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddClient()));         
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddClient()));        
             
           },
           disabledElevation: 10,

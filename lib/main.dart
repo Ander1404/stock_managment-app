@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:stocktrue/Achats/Achats.dart';
-import 'package:stocktrue/Fournisseurs/Fournisseurs.dart';
 import 'package:stocktrue/Paternars.dart';
 import 'package:stocktrue/Produits/product.dart';
 import 'package:stocktrue/Ventes/vente.dart';
@@ -42,7 +41,7 @@ class _HomescreenState extends State<Homescreen> {
     const Product(),
     const Achats(),
     const Ventes(),
-    const Fournisseurs(),
+    //const Fournisseurs(),
     const Paternars()
   ];
   @override
@@ -65,12 +64,12 @@ class _HomescreenState extends State<Homescreen> {
         items:const [        
          BottomNavigationBarItem(icon: Icon(Icons.home_rounded),
         label: "Product"),
-        BottomNavigationBarItem(icon: Icon(Icons.person_2_outlined),
+        BottomNavigationBarItem(icon: Icon(Icons.business_center_outlined),
         label: "Achats"),
-        BottomNavigationBarItem(icon: Icon(Icons.category_outlined),
+        BottomNavigationBarItem(icon: Icon(Icons.sell),
         label: "Ventes"),
-        BottomNavigationBarItem(icon: Icon(Icons.category_outlined),
-        label: "Stock"),
+        // BottomNavigationBarItem(icon: Icon(Icons.category_outlined),
+        // label: "Stock"),
         BottomNavigationBarItem(icon: Icon(Icons.person_2_outlined),
         label: "Partenaires")
       ]

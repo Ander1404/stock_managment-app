@@ -12,9 +12,9 @@ class Homefourn extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = HeroItemsFourni();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Fournisseur"),
-      ),
+      // appBar: AppBar(
+      //   title: const Text("Fournisseur"),
+      // ),
       body: Container(
         child: ListView.builder(
             itemCount: controller.items.length,
