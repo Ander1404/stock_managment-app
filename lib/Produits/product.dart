@@ -37,7 +37,7 @@ class _ProductState extends State<Product> {
       ),
       
       body: DefaultTabController(
-        length: 3, 
+        length: 2, 
         child: Column(
           children: [
             //Text("data"),
@@ -59,7 +59,7 @@ class _ProductState extends State<Product> {
                   tabs: [
                     Tab(
                       child: Container(
-                        height: 35,
+                        height: 37,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
@@ -74,7 +74,7 @@ class _ProductState extends State<Product> {
                     ),
                     Tab(
                       child: Container(
-                        height: 35,
+                        height: 37,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
@@ -87,35 +87,18 @@ class _ProductState extends State<Product> {
                         ),
                       ),
                     ),
-                    Tab(
-                      child: Container(
-                        height: 35,
-                        // decoration: BoxDecoration(
-                        //   borderRadius: BorderRadius.circular(30),
-                        //   border: Border.all(
-                        //     color: Colors.orangeAccent, width: 1
-                        //   )
-                        // ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Text("A propos",style: TextStyle(
-                            color: Color.fromARGB(255, 56, 56, 56)
-                          ),),
-                        ),
-                      ),
-                    )
+                    
                   ]
                   
                   
                   )
               ),
             ),
-            Expanded(
+            const Expanded(
               child: TabBarView(
                 children: [
                   Allproduct(),
-                  Cat(),
-                  Center(child: Text("data"),),
+                  Cat()                 
                 ],
               )
               )

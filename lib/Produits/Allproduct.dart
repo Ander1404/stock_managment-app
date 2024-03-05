@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:stocktrue/Produits/detailproduit.dart';
 
+import '../Colors.dart';
 import 'Add_product.dart';
 
 class Allproduct extends StatefulWidget {
@@ -167,11 +168,9 @@ class _AllproductState extends State<Allproduct> {
         ),
     floatingActionButton: FloatingActionButton(
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const Addproduct()));
-          
-            
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const Addproduct()));           
           },
-          backgroundColor: Colors.orange[900],
+          backgroundColor: orange(),
           disabledElevation: 10,
           child: const Icon(Icons.add,
           color: Colors.white,

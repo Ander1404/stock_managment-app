@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Color firstone(){
+Color orangeAccent(){
   return Colors.orangeAccent;
 }
 Color blacks(){
@@ -9,5 +9,8 @@ Color blacks(){
 
 Color white(){
   return Colors.white;
+}
+Color? orange(){
+  return Colors.orange[800];
 }
 

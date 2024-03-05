@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Stock manager',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
         
       ),
@@ -46,8 +46,7 @@ class _HomescreenState extends State<Homescreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
+    return Scaffold(      
       body:widgetlist[myindex],
       bottomNavigationBar:  BottomNavigationBar(
        backgroundColor: Colors.white,
