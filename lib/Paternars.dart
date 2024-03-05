@@ -14,7 +14,15 @@ class _PaternarsState extends State<Paternars> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
+      appBar: AppBar(
+        // centerTitle: true,
+        actions: const [IconButton(onPressed: null, icon: Icon(Icons.info_outline))],
+        title: const Text("FourniMag",textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+        )
+      ),
       body: DefaultTabController(
         length: 2, 
         child: Column(

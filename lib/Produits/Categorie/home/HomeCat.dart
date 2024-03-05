@@ -75,17 +75,17 @@ class _CatState extends State<Cat> {
           return Card(   
             color: Colors.white,  
             elevation: 0,
-              margin: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(8),
             child: ListTile(              
              onTap: (){
               // Navigator.push(context, MaterialPageRoute(builder: (context)=>Editacta(data[index]["CODETYPE"],data[index]["MOTIF"],data[index]["MONTANT"])));
              },
-             leading: Icon(Icons.category,color:  orange(),),
+             leading: Icon(Icons.category,color:  princip(),),
              title: Text("Categorie: ",
              style: const TextStyle(fontWeight: FontWeight.bold),),
              subtitle: Text("Montant: ",
              style:  TextStyle(
-              color: orange(),
+              color: princip(),
              ),), 
              trailing: IconButton(onPressed: (){
               // delrecord(data[index]["CODETYPE"]);

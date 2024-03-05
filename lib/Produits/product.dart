@@ -22,18 +22,13 @@ class _ProductState extends State<Product> {
   return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: const Color.fromARGB(97, 148, 64, 64),
-        title: const Column(
-          children: [
-            Text(
-              "Furniture",
-              style: TextStyle(
-                
-              ),
-            ),
-          ],
+        // centerTitle: true,
+        actions: const [IconButton(onPressed: null, icon: Icon(Icons.info_outline))],
+        title: const Text("FourniMag",textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
         ),
+        )
       ),
       
       body: DefaultTabController(
