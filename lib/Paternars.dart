@@ -32,8 +32,7 @@ class _PaternarsState extends State<Paternars> {
                   unselectedLabelColor: blacks(),
                   labelColor: blacks(),
                   //indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: BoxDecoration(
-                    
+                  indicator: BoxDecoration(                    
                     borderRadius: BorderRadius.circular(30),
                     color: const Color.fromARGB(255, 255, 173, 66)
                   ),
@@ -44,7 +43,7 @@ class _PaternarsState extends State<Paternars> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
-                            color: Colors.orange, width: 1
+                            color: princip(), width: 1
                           )
                         ),
                         child:const Align(
@@ -60,7 +59,7 @@ class _PaternarsState extends State<Paternars> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
-                            color: Colors.orangeAccent, width: 1
+                            color: princip(), width: 1
                           )
                         ),
                         child: const Align(

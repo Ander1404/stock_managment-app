@@ -102,11 +102,11 @@ class _CatState extends State<Cat> {
       
       },
       backgroundColor: Colors.white,
-      child: const Icon(
+      child:  Icon(
         Icons.add_outlined,        
         //size: 3,
         
-        color: Colors.green,
+        color: princip(),
         
         ),
       

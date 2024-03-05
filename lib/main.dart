@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:stocktrue/Achats/Achats.dart';
+import 'package:stocktrue/Colors.dart';
 import 'package:stocktrue/Paternars.dart';
 import 'package:stocktrue/Produits/product.dart';
 import 'package:stocktrue/Ventes/vente.dart';
@@ -51,7 +52,7 @@ class _HomescreenState extends State<Homescreen> {
        backgroundColor: Colors.white,
        unselectedItemColor: Colors.black45,
         showUnselectedLabels: true,
-        selectedItemColor: const Color.fromRGBO(254, 188, 8, 1),
+        selectedItemColor: princip(),
         elevation: 0,
         onTap: (index){
           setState(() {

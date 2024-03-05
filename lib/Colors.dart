@@ -13,4 +13,7 @@ Color white(){
 Color? orange(){
   return Colors.orange[800];
 }
+Color princip(){
+  return const Color.fromRGBO(254, 188, 8, 1);
+}
 
