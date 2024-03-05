@@ -49,8 +49,10 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(      
       body:widgetlist[myindex],
       bottomNavigationBar:  BottomNavigationBar(
+        
        backgroundColor: Colors.white,
        unselectedItemColor: Colors.black45,
+       
         showUnselectedLabels: true,
         selectedItemColor: princip(),
         elevation: 0,

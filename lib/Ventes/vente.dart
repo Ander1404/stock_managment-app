@@ -22,7 +22,13 @@ class _VentesState extends State<Ventes> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Ventes"),
+        // centerTitle: true,
+        actions: const [IconButton(onPressed: null, icon: Icon(Icons.info_outline))],
+        title: const Text("FourniMag",textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+        )
       ),
       body: ListView.builder(
         itemCount: 10,
