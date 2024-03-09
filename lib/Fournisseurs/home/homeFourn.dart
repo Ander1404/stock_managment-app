@@ -37,6 +37,7 @@ Future<void> delrecord(String id) async {
       var reponse=jsonDecode(result.body);
       if(reponse["Success"]=="True"){
         print("record deleted");
+        debugPrint("");
         getrecord();
       }
       else{
@@ -50,7 +51,7 @@ Future<void> delrecord(String id) async {
     }
    }
 Future<void> getrecord () async {
-  var url="http://$adress/Salle_db/Type/readtype.php";
+  var url="http://$adress/API_VENTE/FOURNISSEUR/getfournisseur.php";
   try{
     var response=await http.get(Uri.parse(url));
     if (response.statusCode==200){
@@ -81,27 +82,29 @@ Future<void> getrecord () async {
       // ),
       // backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       body: ListView.builder(
+        
           itemCount: data.length,
           itemBuilder: (context,index){
             return Card(
+              
               color: Colors.white,  
             elevation: 2,
             // shadowColor:,
             
               margin: const EdgeInsets.all(5),
-              child: ListTile(
+              child: ListTile(                
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetailsFournisseur(items: controller.items[index])));
                 },
                 title: Text(data[index]["noms"]),
-                subtitle: Text(data[index]["telephone"]),
+                subtitle: Text(data[index]["mail"]),
                 trailing:  IconButton(
                   onPressed: (){}, 
                   icon: const Icon(Icons.edit_note_outlined)),
                 leading: Hero(
                   //Tag should be different
                   //having identical tag will not work in hero animation
-                  tag: data[index]["id_client"],
+                  tag: data[index]["id_fournisseur"],
                   child: const CircleAvatar(
                     radius: 30,
                     child: Icon(Icons.person_2_outlined,),
@@ -114,8 +117,7 @@ Future<void> getrecord () async {
       
       floatingActionButton: FloatingActionButton(
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddFournisseur()));
-          
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddFournisseur()));          
             
           },
           //backgroundColor: Colors.orange[900],

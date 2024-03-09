@@ -18,12 +18,16 @@ class Cat extends StatefulWidget {
  
 class _CatState extends State<Cat> {
   String adress=currentip();
+
   double screenheigth=0;
+
   double screenwith=0;
-  List data=[123,34,5,5,6,7];
-    Future<void> delrecord(String id) async {
+
+  List data=[];
+  String status='';
+Future<void> delrecord(String id) async {
     try{
-      var url="http://$adress/Salle_db/Type/deltype.php";
+      var url="http://$adress/API_VENTE/CATEGORIEPROD/deletecategorie.php";      
       var result=await http.post(Uri.parse(url),
       body: {
         "id":id
@@ -32,10 +36,11 @@ class _CatState extends State<Cat> {
       var reponse=jsonDecode(result.body);
       if(reponse["Success"]=="True"){
         print("record deleted");
+        debugPrint("");
         getrecord();
-      }      
+      }
       else{
-        print("Erreur de suppression");
+        print("Erreur de suppression"); 
         getrecord();
       }
 
@@ -44,37 +49,39 @@ class _CatState extends State<Cat> {
       print(e);
     }
    }
-
- Future<void> getrecord () async {
-  var url="http://$adress/Salle_db/Type/readtype.php";
+Future<void> getrecord () async {
+  var url="http://$adress/API_VENTE/CATEGORIEPROD/getcategorie.php";
   try{
     var response=await http.get(Uri.parse(url));
-    setState(() {
-      data=jsonDecode(response.body);
-    });
+    if (response.statusCode==200){
+      data = jsonDecode(response.body);
+      status='Success';
+    }
+    else{
+    }    
   }
   catch (e){
     print(e);
   }
  }
-  @override
+@override
   void initState() {
     // TODO: implement initState
-    // getrecord();
     super.initState();
+    getrecord();
   }
   @override
   Widget build(BuildContext context) {
-    screenwith=MediaQuery.of(context).size.width;
+     screenwith=MediaQuery.of(context).size.width;
      screenheigth=MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       
       body: ListView.builder(
         // itemCount: data.length,
-        itemCount: 4,
+        itemCount: data.length,
         itemBuilder: (context,index){
-          return Card(   
+           return Card(   
             color: Colors.white,  
             elevation: 0,
               margin: const EdgeInsets.all(8),
@@ -82,17 +89,19 @@ class _CatState extends State<Cat> {
              onTap: (){
               // Navigator.push(context, MaterialPageRoute(builder: (context)=>Editacta(data[index]["CODETYPE"],data[index]["MOTIF"],data[index]["MONTANT"])));
              },
-             leading: Icon(Icons.category,color:  princip(),),
-             title: Text("Categorie: ",
+             leading: const Icon(Icons.category,),
+             title: Text("Categorie: ${data[index]["designation"]}",
              style: const TextStyle(fontWeight: FontWeight.bold),),
-             subtitle: Text("Montant: ",
-             style:  TextStyle(
-              color: princip(),
-             ),), 
+            //  subtitle: Text("Montant: ",
+            //  style:  TextStyle(
+            //   color: princip(),
+            //  ),), 
              trailing: IconButton(onPressed: (){
-              // delrecord(data[index]["CODETYPE"]);
+              delrecord(data[index]["id_categorie"]);
              }, 
-             icon: const Icon(Icons.delete,color: Colors.redAccent,)),
+             icon: const Icon(Icons.delete,
+            //  color: Colors.redAccent,
+             )),
             )
           );
         }
@@ -103,7 +112,7 @@ class _CatState extends State<Cat> {
         Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddCat()));   
       
       },
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       child:  Icon(
         Icons.add_outlined,        
         //size: 3,

@@ -1,11 +1,74 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import '../../ip.dart';
 import '../Hero/hero_details.dart';
 import '../Hero/hero_info.dart';
 import 'Addclient.dart';
+import 'package:http/http.dart' as http;
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String adress=currentip();
+
+  double screenheigth=0;
+
+  double screenwith=0;
+
+  List data=[];
+  String status='';
+Future<void> delrecord(String id) async {
+    try{
+      var url="http://$adress/API_VENTE/FOURNISSEUR/deletefournisseur.php";
+      
+      var result=await http.post(Uri.parse(url),
+      body: {
+        "id":id
+      }
+      );
+      var reponse=jsonDecode(result.body);
+      if(reponse["Success"]=="True"){
+        print("record deleted");
+        debugPrint("");
+        getrecord();
+      }
+      else{
+        print("Erreur de suppression"); 
+        getrecord();
+      }
+
+    }
+    catch(e){
+      print(e);
+    }
+   }
+Future<void> getrecord () async {
+  var url="http://$adress/API_VENTE/CLIENTS/getclient.php";
+  try{
+    var response=await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      data = jsonDecode(response.body);
+      status='Success';
+    }
+    else{
+    }    
+  }
+  catch (e){
+    print(e);
+  }
+ }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getrecord();
+  }
   @override
   Widget build(BuildContext context) {
     final controller = HeroItems();
@@ -14,30 +77,30 @@ class Home extends StatelessWidget {
       //   title: const Text("Clients"),
       // ),
       body: ListView.builder(
-          itemCount: 8,
+        
+          itemCount: data.length,
           itemBuilder: (context,index){
-            return Card(
+            return Card(              
               color: Colors.white,  
             elevation: 2,
-            // shadowColor:,
-            
+            // shadowColor:,            
               margin: const EdgeInsets.all(5),
-              child: ListTile(
+              child: ListTile(                
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
                 },
-                title: Text(controller.items[index].title),
-                subtitle: Text(controller.items[index].subtitle),
+                title: Text(data[index]["noms"]),
+                subtitle: Text(data[index]["telephone"]),
                 trailing:  IconButton(
                   onPressed: (){}, 
                   icon: const Icon(Icons.edit_note_outlined)),
                 leading: Hero(
                   //Tag should be different
                   //having identical tag will not work in hero animation
-                  tag: controller.items[index].image,
+                  tag: data[index]["id_client"],
                   child: const CircleAvatar(
                     radius: 30,
-                    child: Icon(Icons.person_2_outlined),
+                    child: Icon(Icons.person_2_outlined,),
                   ),
                   
                 ),
