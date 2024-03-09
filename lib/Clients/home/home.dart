@@ -14,38 +14,38 @@ class Home extends StatelessWidget {
       //   title: const Text("Clients"),
       // ),
       body: ListView.builder(
-        
-        padding: const EdgeInsets.all(10),
-          itemCount: controller.items.length,
+          itemCount: 8,
           itemBuilder: (context,index){
-            return ListTile(
-              
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
-              },                
-              title: Text(controller.items[index].title),
-              subtitle: Text(controller.items[index].subtitle),
-              leading: Hero(
-                //Tag should be different
-                //having identical tag will not work in hero animation
-                tag: controller.items[index].image,
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: AssetImage(controller.items[index].image),
+            return Card(
+              color: Colors.white,  
+            elevation: 2,
+            // shadowColor:,
+            
+              margin: const EdgeInsets.all(5),
+              child: ListTile(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
+                },
+                title: Text(controller.items[index].title),
+                subtitle: Text(controller.items[index].subtitle),
+                trailing:  IconButton(
+                  onPressed: (){}, 
+                  icon: const Icon(Icons.edit_note_outlined)),
+                leading: Hero(
+                  //Tag should be different
+                  //having identical tag will not work in hero animation
+                  tag: controller.items[index].image,
+                  child: const CircleAvatar(
+                    radius: 30,
+                    child: Icon(Icons.person_2_outlined),
+                  ),
+                  
                 ),
               ),
-              trailing: IconButton(onPressed: (){
-              //delrecord(userdata[index]["id"]);
-            }, 
-            icon: const Icon(Icons.delete),
-            style: const ButtonStyle(
-              //iconColor: Color()
-            )
-            
-            ),
-              
             );
           }),
+      
+      
       floatingActionButton: FloatingActionButton(
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddClient()));        
