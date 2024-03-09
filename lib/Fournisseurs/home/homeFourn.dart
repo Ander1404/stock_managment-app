@@ -70,15 +70,15 @@ Future<void> getrecord () async {
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetailsFournisseur(items: controller.items[index])));
                 },
-                title: Text(data[index]["NOM"]),
-                subtitle: Text(data[index]["NOM"]),
+                title: Text(data[index]["noms"]),
+                subtitle: Text(data[index]["telephone"]),
                 trailing:  IconButton(
                   onPressed: (){}, 
                   icon: const Icon(Icons.edit_note_outlined)),
                 leading: Hero(
                   //Tag should be different
                   //having identical tag will not work in hero animation
-                  tag: data[index]["NOM"],
+                  tag: data[index]["id_client"],
                   child: const CircleAvatar(
                     radius: 30,
                     child: Icon(Icons.person_2_outlined,),
