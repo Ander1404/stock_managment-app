@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
+import 'package:stocktrue/ip.dart';
 class AddFournisseur extends StatefulWidget {
   const AddFournisseur({super.key});
 
@@ -8,22 +9,27 @@ class AddFournisseur extends StatefulWidget {
 }
 
 class _AddFournisseurState extends State<AddFournisseur> {
+  
   TextEditingController nom=TextEditingController();
   TextEditingController adresse=TextEditingController();
   TextEditingController mail=TextEditingController();
   TextEditingController phone=TextEditingController();
-  
-Future <void> savadatas() async{
-  
-//     var url="http://192.168.1.67/Myusers/create.php";
-//     Uri ulr=Uri.parse(url);
+  late String adresseip;
+ Future <void> savadatas() async{  
+    var url="http://$adresseip/API_VENTE/FOURNISSEUR/insertfournisseur.php";
+    Uri ulr=Uri.parse(url);
 
-// await http.post(ulr,body: {
-//   "name":nom.text,"adresse":adresse.text,"phone":phone.text,"mail":mail.text
-// });
-
+await http.post(ulr,body: {
+  "noms":nom.text,"adresse":adresse.text,"mail":mail.text,"telephone":phone.text
+});
+    // Map <String, String> body = {"name":txtnom.text,"pass":pass.text,"roles":role.text};
 }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    adresseip=currentip();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +83,10 @@ Future <void> savadatas() async{
                         height: 25,
                       ),
                       ElevatedButton(
-                        onPressed: () {savadatas();},
+                        onPressed: () {
+                          savadatas();
+                          
+                          },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           backgroundColor: Colors.orange[800],
