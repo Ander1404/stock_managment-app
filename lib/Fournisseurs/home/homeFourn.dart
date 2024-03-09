@@ -78,7 +78,7 @@ Future<void> getrecord () async {
                 leading: Hero(
                   //Tag should be different
                   //having identical tag will not work in hero animation
-                  tag: controller.items[index].image,
+                  tag: data[index]["NOM"],
                   child: const CircleAvatar(
                     radius: 30,
                     child: Icon(Icons.person_2_outlined,),
