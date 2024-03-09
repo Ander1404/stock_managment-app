@@ -87,13 +87,13 @@ await http.post(ulr,body: {
                           savadatas();
                           
                           },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          // backgroundColor: Colors.orange[800],
-                          fixedSize: const Size(350, 45),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
+                        // style: ElevatedButton.styleFrom(
+                        //   elevation: 0,
+                        //   // backgroundColor: Colors.orange[800],
+                        //   fixedSize: const Size(120, 45),
+                        //   shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(8)),
+                        // ),
                         child: const Text(
                           'Save',
                           style: TextStyle(
