@@ -1,9 +1,11 @@
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:stocktrue/Colors.dart';
 // import 'package:salle/Reservation/AjouterCat.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 
 import 'package:stocktrue/Produits/Categorie/home/AddCat.dart';
 import 'package:stocktrue/ip.dart';
@@ -19,42 +21,42 @@ class _CatState extends State<Cat> {
   double screenheigth=0;
   double screenwith=0;
   List data=[123,34,5,5,6,7];
-  //   Future<void> delrecord(String id) async {
-  //   try{
-  //     var url="http://$adress/Salle_db/Type/deltype.php";
-  //     var result=await http.post(Uri.parse(url),
-  //     body: {
-  //       "id":id
-  //     }
-  //     );
-  //     var reponse=jsonDecode(result.body);
-  //     if(reponse["Success"]=="True"){
-  //       print("record deleted");
-  //       getrecord();
-  //     }
-  //     else{
-  //       print("Erreur de suppression");
-  //       getrecord();
-  //     }
+    Future<void> delrecord(String id) async {
+    try{
+      var url="http://$adress/Salle_db/Type/deltype.php";
+      var result=await http.post(Uri.parse(url),
+      body: {
+        "id":id
+      }
+      );
+      var reponse=jsonDecode(result.body);
+      if(reponse["Success"]=="True"){
+        print("record deleted");
+        getrecord();
+      }      
+      else{
+        print("Erreur de suppression");
+        getrecord();
+      }
 
-  //   }
-  //   catch(e){
-  //     print(e);
-  //   }
-  //  }
+    }
+    catch(e){
+      print(e);
+    }
+   }
 
-//  Future<void> getrecord () async {
-//   var url="http://$adress/Salle_db/Type/readtype.php";
-//   try{
-//     var response=await http.get(Uri.parse(url));
-//     setState(() {
-//       data=jsonDecode(response.body);
-//     });
-//   }
-//   catch (e){
-//     print(e);
-//   }
-//  }
+ Future<void> getrecord () async {
+  var url="http://$adress/Salle_db/Type/readtype.php";
+  try{
+    var response=await http.get(Uri.parse(url));
+    setState(() {
+      data=jsonDecode(response.body);
+    });
+  }
+  catch (e){
+    print(e);
+  }
+ }
   @override
   void initState() {
     // TODO: implement initState
