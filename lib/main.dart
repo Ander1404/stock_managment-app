@@ -7,6 +7,7 @@ import 'package:stocktrue/Paternars.dart';
 import 'package:stocktrue/Produits/product.dart';
 import 'package:stocktrue/Ventes/vente.dart';
 
+
 void main() {
   runApp(const MyApp());
 }

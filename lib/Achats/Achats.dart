@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stocktrue/Ventes/AddVentes.dart';
+import 'package:http/http.dart' as http;
 
 class Achats extends StatefulWidget {
   const Achats({super.key});
