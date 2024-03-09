@@ -25,7 +25,30 @@ class _HomefournState extends State<Homefourn> {
 
   List data=[];
   String status='';
+Future<void> delrecord(String id) async {
+    try{
+      var url="http://$adress/API_VENTE/FOURNISSEUR/deletefournisseur.php";
+      
+      var result=await http.post(Uri.parse(url),
+      body: {
+        "id":id
+      }
+      );
+      var reponse=jsonDecode(result.body);
+      if(reponse["Success"]=="True"){
+        print("record deleted");
+        getrecord();
+      }
+      else{
+        print("Erreur de suppression");
+        getrecord();
+      }
 
+    }
+    catch(e){
+      print(e);
+    }
+   }
 Future<void> getrecord () async {
   var url="http://$adress/Salle_db/Type/readtype.php";
   try{
