@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String adress=currentip();
+ late String adress;
 
   double screenheigth=0;
 
@@ -49,7 +49,8 @@ Future<void> delrecord(String id) async {
     }
    }
 Future<void> getrecord () async {
-  var url="http://$adress/API_VENTE/CLIENTS/getclient.php";
+   var url="http://$adress/API_VENTE/CLIENT/getclient.php";
+  
   try{
     var response=await http.get(Uri.parse(url));
     if (response.statusCode==200){
@@ -66,8 +67,10 @@ Future<void> getrecord () async {
 @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    adress=currentip();
     getrecord();
+    super.initState();
+    
   }
   @override
   Widget build(BuildContext context) {
@@ -92,7 +95,9 @@ Future<void> getrecord () async {
                 title: Text(data[index]["noms"]),
                 subtitle: Text(data[index]["telephone"]),
                 trailing:  IconButton(
-                  onPressed: (){}, 
+                  onPressed: (){
+                    showAdaptiveDialog(context: context, builder: (context)=>Center(child: Text("Erreur de modification")));
+                  }, 
                   icon: const Icon(Icons.edit_note_outlined)),
                 leading: Hero(
                   //Tag should be different

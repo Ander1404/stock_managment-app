@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stocktrue/Ventes/AddVentes.dart';
@@ -36,9 +37,19 @@ class _AchatsState extends State<Achats> {
         itemBuilder: (context,index){
             return Slidable(
               key: Key('$index'),
-              endActionPane: ActionPane(motion: const ScrollMotion(), 
+              endActionPane: ActionPane(motion: const ScrollMotion(),               
               children: [
                 SlidableAction(onPressed: (context){
+                  // showModalBottomSheet(context: context, builder: (context)=>ListView());
+                  // showBottomSheet(context: context, builder: (context)=>ListView());
+                   showDialog(context: context, builder: (context)=>ListView());
+                   const Hero(
+                  //Tag should be different
+                  //having identical tag will not work in hero animation
+                  tag: Text("Current"),
+                  child: Dialog.fullscreen(),
+                  
+                );
                   setState(() {
                     
                   });
@@ -57,23 +68,26 @@ class _AchatsState extends State<Achats> {
                 ),
                 const SizedBox(width: 10,),
                 SlidableAction(onPressed: (context){
-                  
+                  showAdaptiveDialog(context: context, builder: (context)=>Center(child: Text("Erreur de modification")));
+                
                 },
                 foregroundColor: Colors.red,
                 icon: Icons.delete,
                 )
               ]),
               child: Padding(
-                padding:  const EdgeInsets.symmetric(vertical: 20.0),
-                child: Container(                    
+                padding:  const EdgeInsets.symmetric(vertical: 7.0),
+                child: Container(       
+                               
                   margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  padding: const EdgeInsets.all(10.0),
-                  height: 100,
+                  padding: const EdgeInsets.all(5.0),
+                  height: 80,
                   decoration: BoxDecoration(
+                    
                     borderRadius: BorderRadius.circular(10.0),
                     color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
+                    boxShadow:   [
+                      BoxShadow(                        
                         blurRadius: 1.0,
                         spreadRadius: 1.0,
                         color: Colors.grey[400]!,
@@ -86,7 +100,7 @@ class _AchatsState extends State<Achats> {
                     children: [
                       ClipRect(
                         child: Text(
-                          "${index +1}. ",
+                          "      ${index +1}. ",
                           style: const TextStyle(
                             fontWeight: FontWeight.w400
                           ),
@@ -95,16 +109,13 @@ class _AchatsState extends State<Achats> {
                       
                        const Column(
                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,    
-                                        
-                        
+                        crossAxisAlignment: CrossAxisAlignment.start, 
                         children: [                
                           Padding(padding: EdgeInsets.only(left: 30)),        
                           Padding(
                             padding: EdgeInsets.only(left: 30),
-                            child: Row(                      
-                              
-                                                  //     mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(                                                 
+                                    //     mainAxisAlignment: MainAxisAlignment.center,
                                                   // crossAxisAlignment: CrossAxisAlignment.start,
                               children: [                              
                                  Text("Clients",
@@ -139,7 +150,7 @@ class _AchatsState extends State<Achats> {
                           Text("Date")
                         ],
                       ),
-                      SizedBox(width: screenwith/5,),
+                      SizedBox(width: screenwith/8,),
                       const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,

@@ -3,8 +3,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:stocktrue/Colors.dart';
-// import 'package:salle/Reservation/AjouterCat.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:stocktrue/Produits/Categorie/home/AddCat.dart';
@@ -90,7 +88,7 @@ Future<void> getrecord () async {
               // Navigator.push(context, MaterialPageRoute(builder: (context)=>Editacta(data[index]["CODETYPE"],data[index]["MOTIF"],data[index]["MONTANT"])));
              },
              leading: const Icon(Icons.category,),
-             title: Text("Categorie: ${data[index]["designation"]}",
+             title: Text("Categorie: ${data[index]["desigantion"]}",
              style: const TextStyle(fontWeight: FontWeight.bold),),
             //  subtitle: Text("Montant: ",
             //  style:  TextStyle(
@@ -113,11 +111,11 @@ Future<void> getrecord () async {
       
       },
       // backgroundColor: Colors.white,
-      child:  Icon(
+      child:  const Icon(
         Icons.add_outlined,        
         //size: 3,
         
-        color: princip(),
+        // color: princip(),
         
         ),
       

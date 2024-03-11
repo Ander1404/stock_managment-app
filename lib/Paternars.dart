@@ -1,8 +1,33 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:stocktrue/Clients/Clients.dart';
 import 'package:stocktrue/Colors.dart';
 import 'package:stocktrue/Fournisseurs/Fournisseurs.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:stocktrue/ip.dart';
+
+List data=[];
+String status='';
+ String adress='';
+
+Future<void> getrecord () async {
+   var url="http://$adress/API_VENTE/CLIENT/getclient.php";
+  
+  try{
+    var response=await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      data = jsonDecode(response.body);
+      status='Success';
+    }
+    else{
+    }    
+  }
+  catch (e){
+    print(e);
+  }
+ }
 class Paternars extends StatefulWidget {
   const Paternars({super.key});
 
@@ -11,6 +36,13 @@ class Paternars extends StatefulWidget {
 }
 
 class _PaternarsState extends State<Paternars> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+adress=currentip();
+getrecord();    
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +64,7 @@ class _PaternarsState extends State<Paternars> {
               child: Container(
                 height: 55,
                 color: white(),
-                child: TabBar(
+                 child: TabBar(
                   physics: const ClampingScrollPhysics(),
                   padding: const EdgeInsets.only(
                     top: 10,left: 10,right: 10, bottom: 10
