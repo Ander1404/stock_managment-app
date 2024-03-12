@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -41,15 +43,7 @@ class _AchatsState extends State<Achats> {
               children: [
                 SlidableAction(onPressed: (context){
                   // showModalBottomSheet(context: context, builder: (context)=>ListView());
-                  // showBottomSheet(context: context, builder: (context)=>ListView());
-                   showDialog(context: context, builder: (context)=>ListView());
-                   const Hero(
-                  //Tag should be different
-                  //having identical tag will not work in hero animation
-                  tag: Text("Current"),
-                  child: Dialog.fullscreen(),
-                  
-                );
+                  // showBottomSheet(context: context, builder: (context)=>ListView());                   
                   setState(() {
                     
                   });
@@ -68,102 +62,74 @@ class _AchatsState extends State<Achats> {
                 ),
                 const SizedBox(width: 10,),
                 SlidableAction(onPressed: (context){
-                  showAdaptiveDialog(context: context, builder: (context)=>Center(child: Text("Erreur de modification")));
-                
+                  //showAdaptiveDialog(context: context, builder: (context)=>Center(child: Text("Erreur de modification")));
+                showDialog(context: context, builder: (context)=>CupertinoAlertDialog(//   AlertDialog.adaptive(
+                    
+                    title: const Text("Voulez-vous vraiment supprimer ?"),
+                    actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton(onPressed: (){
+                               
+                              }, child: const Text("Annuler",style: TextStyle(color: Colors.black),)),
+                              TextButton(onPressed: (){
+
+                              }, child: const Text("Effectuer"))
+                            ],
+                          )
+                    ],
+                   )
+                   );
                 },
                 foregroundColor: Colors.red,
                 icon: Icons.delete,
                 )
               ]),
               child: Padding(
-                padding:  const EdgeInsets.symmetric(vertical: 7.0),
-                child: Container(       
-                               
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  padding: const EdgeInsets.all(5.0),
-                  height: 80,
-                  decoration: BoxDecoration(
-                    
+                padding:  const EdgeInsets.symmetric(vertical: 2.0),
+                child: Container(                                                        
+                  margin: const EdgeInsets.symmetric(horizontal: 14.0),
+                  padding: const EdgeInsets.all(0.0),
+                  height: 90,
+                  decoration: BoxDecoration(                    
                     borderRadius: BorderRadius.circular(10.0),
                     color: Colors.white,
-                    boxShadow:   [
-                      BoxShadow(                        
+                    boxShadow:  const [
+                       BoxShadow(                        
                         blurRadius: 1.0,
-                        spreadRadius: 1.0,
-                        color: Colors.grey[400]!,
+                        spreadRadius: 0.0,
+                        color: Colors.transparent,
                       )
                     ]
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ClipRect(
-                        child: Text(
-                          "      ${index +1}. ",
+                  child:Card(
+                elevation: 0.5,
+                child: ListTile(                
+                  onTap: (){
+                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
+                  },
+                  title: const Text("nomsmmmmmmmmm",style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16
+                                )),
+                  subtitle: Text("telephone",style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16
+                                )),
+                  trailing:  Text("26 janvier 2020'"),
+                  leading:  Text(
+                          "${index +1}. ",
                           style: const TextStyle(
                             fontWeight: FontWeight.w400
                           ),
                           ),
-                      ),
-                      
-                       const Column(
-                       mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start, 
-                        children: [                
-                          Padding(padding: EdgeInsets.only(left: 30)),        
-                          Padding(
-                            padding: EdgeInsets.only(left: 30),
-                            child: Row(                                                 
-                                    //     mainAxisAlignment: MainAxisAlignment.center,
-                                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [                              
-                                 Text("Clients",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16
-                                ),),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-                          Padding(
-                            padding: EdgeInsets.only(left: 30),
-                            child: Row(
-                               children: [                              
-                                Text("Montants",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16
-                                ),
-                                )
-                              ],
-                            ),
-                          ),
-                          
-                        ],
-                      ),
-                      SizedBox(width: screenwith/15,),
-                      const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Date")
-                        ],
-                      ),
-                      SizedBox(width: screenwith/8,),
-                      const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: null,
-                           icon: Icon(Icons.price_change))
-                        ],
-                      )
-                    ],
+                    
                   ),
+              )
                 ),
               ),
+            
             );
         
         
