@@ -51,21 +51,39 @@ await http.post(ulr,body: {
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
                        TextField(
                           controller: nom,
                           decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person_2_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),
                               hintText: "Nom du client", labelText: "Nom")),
                       const SizedBox(height: 25),
                        TextField(
                           controller: adresse,
                           decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.place_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),
                               hintText: "Adresse du client",
                               labelText: "Adresse")),
                               const SizedBox(height: 25),
                        TextField(
                           controller: phone,
                           keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(                            
+                          decoration: const InputDecoration(    
+                            prefixIcon: Icon(Icons.phone),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),                        
                               hintText: "Contact du client",
                               labelText: "Contact")),
                               const SizedBox(height: 25),
@@ -73,6 +91,11 @@ await http.post(ulr,body: {
                           controller: mail,                          
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.email_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),
                             // border: OutlineInputBorder(
                               
                             // ),
@@ -80,29 +103,26 @@ await http.post(ulr,body: {
                               labelText: "mail")
                               ),
                       const SizedBox(
-                        height: 25,
+                        height: 10,
                       ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                       icon: const Icon(
+                          Icons.save_alt_outlined,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          "Save",
+                          style: TextStyle(color: Colors.black),
+                        ),
                         onPressed: () {
                           savadatas();
                           },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          backgroundColor: Colors.orange[800],
-                          fixedSize: const Size(350, 45),
+                          backgroundColor: const Color.fromARGB(255, 240, 184, 138),
+                          fixedSize: const Size(300, 45),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
-                        ),
-                        child: const Text(
-                          'Save',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            
-                          ),
                         ),
                       ),
                     ],

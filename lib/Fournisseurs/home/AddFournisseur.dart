@@ -51,57 +51,80 @@ await http.post(ulr,body: {
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
                        TextField(
                           controller: nom,
                           decoration: const InputDecoration(
-                              hintText: "Nom du client", labelText: "Nom")),
+                            prefixIcon: Icon(Icons.person_2_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),
+                              hintText: "Nom du Fournisseurs", labelText: "Nom")),
                       const SizedBox(height: 25),
                        TextField(
                           controller: adresse,
                           decoration: const InputDecoration(
-                              hintText: "Adresse du client",
+                            prefixIcon: Icon(Icons.place_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),
+                              hintText: "Adresse du Fournisseurs",
                               labelText: "Adresse")),
                               const SizedBox(height: 25),
                        TextField(
                           controller: phone,
                           keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(                            
-                              hintText: "Contact du client",
+                          decoration: const InputDecoration(    
+                            prefixIcon: Icon(Icons.phone),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),                        
+                              hintText: "Contact du Fournisseurs",
                               labelText: "Contact")),
                               const SizedBox(height: 25),
                        TextField(
-                          controller: mail,
+                          controller: mail,                          
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
-                              hintText: "Mail du client",
+                            prefixIcon: Icon(Icons.email_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),
+                            // border: OutlineInputBorder(
+                              
+                            // ),
+                              hintText: "Mail du Fournisseurs",
                               labelText: "mail")
                               ),
                       const SizedBox(
-                        height: 25,
+                        height: 10,
                       ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        icon: const Icon(
+                          Icons.save_alt_outlined,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          "Save",
+                          style: TextStyle(color: Colors.black),
+                        ),
                         onPressed: () {
                           savadatas();
                           
                           },
                         style: ElevatedButton.styleFrom(
-                          elevation: 9,
+                          elevation: 1,
                           // backgroundColor: Colors.orange[800],
                           fixedSize: const Size(120, 45),
                           // shape: RoundedRectangleBorder(
                           //     borderRadius: BorderRadius.circular(8)
                           //     ),
-                        ),
-                        child: const Text(
-                          'Save',
-                          style: TextStyle(
-                            // color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold
-                          ),
                         ),
                       ),
                     ],
