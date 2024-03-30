@@ -26,6 +26,7 @@ Future <void> savadatas() async{
   @override
   Widget build(BuildContext context) {
     return Container(
+                  color: Colors.white,
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Column(
                     children: [

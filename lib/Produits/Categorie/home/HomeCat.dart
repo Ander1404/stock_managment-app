@@ -1,11 +1,8 @@
 
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:stocktrue/Produits/Categorie/home/AddCat.dart';
 import 'package:stocktrue/ip.dart';
 class Cat extends StatefulWidget {
   const Cat({super.key});
@@ -68,10 +65,15 @@ Future<void> getrecord () async {
     super.initState();
     getrecord();
   }
+  TextEditingController designation=TextEditingController();
+  TextEditingController detail=TextEditingController();
   @override
   Widget build(BuildContext context) {
      screenwith=MediaQuery.of(context).size.width;
      screenheigth=MediaQuery.of(context).size.height;
+     void exec(){
+      () => Navigator.pop(context);
+     }
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       
@@ -107,7 +109,74 @@ Future<void> getrecord () async {
       floatingActionButton: FloatingActionButton(
         onPressed: (){
         // getrecord();
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddCat()));   
+        // Assuming you have imported the flutter_dialogues package
+
+showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        height: 320,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: ListView(
+          children: [
+            const Text("Ajouter une categorie",style: TextStyle(fontWeight: FontWeight.bold),),
+            
+            const SizedBox(height: 15),
+            TextField(
+                          controller: designation,                          
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.description),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange),                              
+                            ),
+                              hintText: "Designation Categorie", labelText: "Designation")),
+                      const SizedBox(height: 10),
+                       TextField(
+                          controller: detail,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.devices_fold_rounded),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange),                              
+                            ),
+                              hintText: "Detail categorie",
+                              labelText: "Detail")),
+                              const SizedBox(height: 25),
+                       
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.save_alt_outlined,color: Colors.black,),
+                        label: const Text("Save",style: TextStyle(color: Colors.black),),
+                        onPressed: (){
+                          // savadatas();
+                          () => Navigator.pop(context);
+
+
+                        },
+                          
+                        style: ElevatedButton.styleFrom(
+                          // elevation: 0,                          
+                          backgroundColor: const Color.fromARGB(255, 227, 174, 131),                          
+                          fixedSize: const Size(300, 45),
+                          shape: RoundedRectangleBorder(                            
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
+                      )
+          ],
+        ),
+      ),
+    );
+  },
+);  
       
       },
       // backgroundColor: Colors.white,
