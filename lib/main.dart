@@ -6,11 +6,15 @@ import 'package:stocktrue/Colors.dart';
 import 'package:stocktrue/Paternars.dart';
 import 'package:stocktrue/Produits/product.dart';
 import 'package:stocktrue/Ventes/vente.dart';
-void main() {
-  runApp(const MyApp());
+
+
+void main() async {
+  runApp( const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  
+
   const MyApp({super.key});
   
   // This widget is the root of your application.
@@ -28,31 +32,31 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+// ignore: must_be_immutable
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
-
+  
   @override
   State<Homescreen> createState() => _HomescreenState();
 }
 
 class _HomescreenState extends State<Homescreen> {
+  // List h=widget.dr;
+//  late List data;
   int myindex=0;
-  List<Widget> widgetlist=[
+  List widgetlist=[
     const Product(),
-    const Achats(),
+         Achats(),
     const Ventes(),
-    //const Fournisseurs(),
     const Paternars()
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(      
       body:widgetlist[myindex],
-      bottomNavigationBar:  BottomNavigationBar(
-        
+      bottomNavigationBar:  BottomNavigationBar(        
        backgroundColor: Colors.white,
-       unselectedItemColor: Colors.black45,
-       
+       unselectedItemColor: Colors.black45,       
         showUnselectedLabels: true,
         selectedItemColor: princip(),
         elevation: 0,
@@ -74,8 +78,7 @@ class _HomescreenState extends State<Homescreen> {
         BottomNavigationBarItem(icon: Icon(Icons.person_2_outlined),
         label: "Partenaires")
       ]
-      ),
-      
+      ),      
     );
   }
 }

@@ -25,7 +25,7 @@ class _HomefournState extends State<Homefourn> {
 
   List data=[];
   String status='';
-Future<void> delrecord(String id) async {
+Future<void> delrecord(int id) async {
     try{
       var url="http://$adress/API_VENTE/FOURNISSEUR/deletefournisseur.php";
       
@@ -54,13 +54,10 @@ Future<void> getrecord () async {
   var url="http://$adress/API_VENTE/FOURNISSEUR/getfournisseur.php";
   try{
     var response=await http.get(Uri.parse(url));
-    if (response.statusCode==200){
-      data = jsonDecode(response.body);
-      status='Success';
-    }
-    else{
-
-    }
+    setState(() {
+      data=jsonDecode(response.body);
+      print(data);
+    });    
     
   }
   catch (e){

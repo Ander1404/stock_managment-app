@@ -10,21 +10,26 @@ import 'package:http/http.dart' as http;
 import '../ip.dart';
 
 class Achats extends StatefulWidget {
-  const Achats({super.key});
+  
+   const Achats(
+    {super.key}   
+    );
 
   @override
   State<Achats> createState() => _AchatsState();
 }
 
 class _AchatsState extends State<Achats> {
-  late String adress;
-  Future<void> delrecord(int id) async {
+  String adress=currentip();
+  List data=[];
+  String status='';
+  Future<void> delrecord(var id) async {
     try{
       var url="http://$adress/API_VENTE/APPROVISIONNEMNT/deleteapprovisionnement.php";
-      
+      String newid=id;
       var result=await http.post(Uri.parse(url),
       body: {
-        "id":id
+        "id":newid,
       }
       );
       var reponse=jsonDecode(result.body);
@@ -43,32 +48,27 @@ class _AchatsState extends State<Achats> {
       print(e);
     }
    }
-    List data=[];
-  String status='';
+    
 Future<void> getrecord () async {
    var url="http://$adress/API_VENTE/APPROVISIONNEMNT/getapprovisionnement.php";
   
   try{
     var response=await http.get(Uri.parse(url));
-    if (response.statusCode==200){
-      data = jsonDecode(response.body);
-      status='Success';
-    }
-    else{
-      setState(() {
-        status='Error';
-      });
-    }    
+    setState(() {
+      data=jsonDecode(response.body);
+      print(data);
+    });    
   }
   catch (e){
     print(e);
   }
  }
+ 
  @override
-  void initState() {   
+  initState() { 
+    getrecord();  
     super.initState();
-    adress=currentip();
-    getrecord();
+    
   }
   double screenheigth=0;
   double screenwith=0;

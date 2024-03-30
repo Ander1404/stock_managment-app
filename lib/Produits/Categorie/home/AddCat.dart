@@ -25,27 +25,19 @@ Future <void> savadatas() async{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text(
-        'New Supplier',
-        textAlign: TextAlign.right,
-        style: TextStyle(
-          fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.bold,          
-        ),
-        )),
-      body: ListView.builder(
-          itemCount: 1, // Number of items in the list
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Container(
+    return Container(
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Column(
                     children: [
                        TextField(
                           controller: designation,
+                          
                           decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.description),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange),
+                              
+                            ),
                               hintText: "Designation Categorie", labelText: "Designation")),
                       const SizedBox(height: 25),
                        TextField(
@@ -78,11 +70,9 @@ Future <void> savadatas() async{
                       ),
                     ],
                   ),
-                ),
-              ],
-            );
-          }),
-    );
-  
+                );
+              
+
+    
   }
 }

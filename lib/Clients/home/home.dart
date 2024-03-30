@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
- late String adress;
+ String adress=currentip();
 
   double screenheigth=0;
 
@@ -52,13 +52,11 @@ Future<void> getrecord () async {
    var url="http://$adress/API_VENTE/CLIENT/getclient.php";
   
   try{
-    var response=await http.get(Uri.parse(url));
-    if (response.statusCode==200){
-      data = jsonDecode(response.body);
-      status='Success';
-    }
-    else{
-    }    
+    var response=await http.get(Uri.parse(url));    
+    setState(() {
+      data=jsonDecode(response.body);
+      print(data);
+    });          
   }
   catch (e){
     print(e);
@@ -67,7 +65,6 @@ Future<void> getrecord () async {
 @override
   void initState() {
     // TODO: implement initState
-    adress=currentip();
     getrecord();
     super.initState();
     
