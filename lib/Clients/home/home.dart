@@ -29,7 +29,7 @@ Future<void> delrecord(String id) async {
       
       var result=await http.post(Uri.parse(url),
       body: {
-        "id":id
+        "id":id.toString()
       }
       );
       var reponse=jsonDecode(result.body);
@@ -93,7 +93,10 @@ Future<void> getrecord () async {
                 subtitle: Text(data[index]["telephone"]),
                 trailing:  IconButton(
                   onPressed: (){
-                    showAdaptiveDialog(context: context, builder: (context)=>Center(child: Text("Erreur de modification")));
+                      showModalBottomSheet(context: context, builder: (context)=>ListView(
+                                          
+                      ));
+                    
                   }, 
                   icon: const Icon(Icons.edit_note_outlined)),
                 leading: Hero(

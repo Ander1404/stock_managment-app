@@ -70,7 +70,7 @@ getrecord();
                     top: 10,left: 10,right: 10, bottom: 10
                   ),
                   unselectedLabelColor: blacks(),
-                  labelColor: blacks(),
+                  labelColor: white(),
                   //indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(                    
                     borderRadius: BorderRadius.circular(30),
@@ -83,11 +83,11 @@ getrecord();
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
-                            color: princip(), width: 1
+                            color: princip(), 
+                            width: 1
                           )
                         ),
-                        child:const Align(
-                          
+                        child:const Align(                          
                           alignment: Alignment.center,
                           child: Text("Clients",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
                         ),

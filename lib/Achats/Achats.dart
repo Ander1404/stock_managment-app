@@ -26,14 +26,15 @@ class _AchatsState extends State<Achats> {
   Future<void> delrecord(var id) async {
     try{
       var url="http://$adress/API_VENTE/APPROVISIONNEMNT/deleteapprovisionnement.php";
-      String newid=id;
+      String newid=id.toString();
       var result=await http.post(Uri.parse(url),
       body: {
         "id":newid,
       }
       );
       var reponse=jsonDecode(result.body);
-      if(reponse["Success"]=="True"){
+      getrecord();
+      if(reponse["Success"]=="Succes"){
         print("record deleted");
         debugPrint("");
         getrecord();
@@ -50,8 +51,7 @@ class _AchatsState extends State<Achats> {
    }
     
 Future<void> getrecord () async {
-   var url="http://$adress/API_VENTE/APPROVISIONNEMNT/getapprovisionnement.php";
-  
+   var url="http://$adress/API_VENTE/APPROVISIONNEMNT/getapprovisionnement.php";  
   try{
     var response=await http.get(Uri.parse(url));
     setState(() {
@@ -125,7 +125,7 @@ Future<void> getrecord () async {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [TextButton(onPressed: (){
                                   print(data[index]["id_approvisionnement"]);
-                                  delrecord(data[index]["id_approvisionnement"]);
+                                  delrecord(data[index]["id_approvisionnement"].toString());
                               }, child: const Text("Effectuer"))
                             ],
                           )
@@ -187,6 +187,8 @@ Future<void> getrecord () async {
         
         }
         ),
+      
+      
       floatingActionButton: FloatingActionButton(
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>const Addventes()));            

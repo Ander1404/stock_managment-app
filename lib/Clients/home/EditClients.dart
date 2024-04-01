@@ -1,56 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:stocktrue/ip.dart';
-class AddClient extends StatefulWidget {
-  const AddClient({super.key});
+
+class EditCat extends StatefulWidget {
+  const EditCat({super.key});
 
   @override
-  State<AddClient> createState() => _AddClientState();
+  State<EditCat> createState() => _EditCatState();
 }
 
-class _AddClientState extends State<AddClient> {
+class _EditCatState extends State<EditCat> {
+  
   TextEditingController nom=TextEditingController();
   TextEditingController adresse=TextEditingController();
   TextEditingController mail=TextEditingController();
   TextEditingController phone=TextEditingController();
-  late String adresseip;
- Future <void> savadatas() async{  
-    var url="http://$adresseip/API_VENTE/CLIENT/insertclient.php";
-    Uri ulr=Uri.parse(url);
-
-await http.post(ulr,body: {
-  "noms":nom.text,"adresse":adresse.text,"mail":mail.text,"telephone":phone.text
-});
-    // Map <String, String> body = {"name":txtnom.text,"pass":pass.text,"roles":role.text};
-}
-@override
-  void initState() {
-    // TODO: implement initState
-    adresseip=currentip();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      appBar: AppBar(title: const Text(
-        'New Client',
-        textAlign: TextAlign.right,
-        style: TextStyle(
-          fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.bold,          
-        ),
-        )),
-      body: ListView.builder(
-          itemCount: 1, // Number of items in the list
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 30, right: 30),
-                  child: Column(
-                    children: [
+    return ListView(
+      children: [
                       const SizedBox(
                         height: 20,
                       ),
@@ -115,7 +81,7 @@ await http.post(ulr,body: {
                           style: TextStyle(color: Colors.black),
                         ),
                         onPressed: () {
-                          savadatas();
+                          // savadatas();
                           },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -127,13 +93,6 @@ await http.post(ulr,body: {
                       ),
                     ],
                   
-                  ),
-                ),
-              ],
-            );
-          }),
-    
     );
-  
   }
 }

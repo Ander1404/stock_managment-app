@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:stocktrue/Produits/detailproduit.dart';
-
-import '../Colors.dart';
 import 'Add_product.dart';
 
 class Allproduct extends StatefulWidget {
@@ -149,7 +147,7 @@ class _AllproductState extends State<Allproduct> {
                                           top: 165,
                                           left: width*0.78,
                                           child: IconButton(onPressed: (){}, 
-                                          icon: Icon(Icons.delete_outline)
+                                          icon: const Icon(Icons.delete_outline)
                                           
                                           ))
                                       ],
@@ -170,10 +168,10 @@ class _AllproductState extends State<Allproduct> {
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>const Addproduct()));           
           },
-          backgroundColor: orange(),
+          // backgroundColor: orange(),
           disabledElevation: 10,
           child: const Icon(Icons.add,
-          color: Colors.white,
+          // color: Colors.white,
           ),
         ),
     

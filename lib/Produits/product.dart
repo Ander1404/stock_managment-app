@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:stocktrue/Colors.dart';
 import 'package:stocktrue/Produits/Categorie/home/HomeCat.dart';
 
 import 'Allproduct.dart';
@@ -45,7 +46,8 @@ class _ProductState extends State<Product> {
                   padding: const EdgeInsets.only(
                     top: 10,left: 10,right: 10, bottom: 10
                   ),
-                  unselectedLabelColor: Colors.orange,
+                  unselectedLabelColor: Colors.black,
+                  labelColor: white(),
                   indicatorSize: TabBarIndicatorSize.label,
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),

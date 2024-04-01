@@ -2,6 +2,6 @@ class Ip {
 }
   
    String currentip(){
-    String current="192.168.1.68";
+    String current="192.168.168.182";
     return current;
   }

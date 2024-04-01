@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:stocktrue/Clients/home/Addclient.dart';
 import 'package:stocktrue/ip.dart';
 
 class Cat extends StatefulWidget {
@@ -19,12 +20,17 @@ class _CatState extends State<Cat> {
 
   List data = [];
   String status = '';
-  Future<void> delrecord(String id) async {
+  Future<void> delrecord(var id) async {
     try {
+      String tmp=id.toString();
       var url = "http://$adress/API_VENTE/CATEGORIEPROD/deletecategorie.php";
-      var result = await http.post(Uri.parse(url), body: {"id": id});
+      var result = await http.post(Uri.parse(url),
+       body: {
+        "id": tmp
+        }
+        );
       var reponse = jsonDecode(result.body);
-      if (reponse["Success"] == "True") {
+      if (reponse["Success"] == "succes") {
         print("record deleted");
         debugPrint("");
         getrecord();
@@ -41,10 +47,13 @@ class _CatState extends State<Cat> {
     var url = "http://$adress/API_VENTE/CATEGORIEPROD/getcategorie.php";
     try {
       var response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
+      setState(() {
         data = jsonDecode(response.body);
+        print(data);
         status = 'Success';
-      } else {}
+      });
+        
+      // } else {}
     } catch (e) {
       print(e);
     }
@@ -75,6 +84,8 @@ class _CatState extends State<Cat> {
                 margin: const EdgeInsets.all(8),
                 child: ListTile(
                   onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AddClient()));
+             
                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>Editacta(data[index]["CODETYPE"],data[index]["MOTIF"],data[index]["MONTANT"])));
                   },
                   leading: const Icon(
@@ -90,7 +101,9 @@ class _CatState extends State<Cat> {
                   //  ),),
                   trailing: IconButton(
                       onPressed: () {
-                        delrecord(data[index]["id_categorie"]);
+                        setState(() {
+                          delrecord(data[index]["id_categorie"]);
+                        });
                       },
                       icon: const Icon(
                         Icons.delete,
@@ -106,12 +119,12 @@ class _CatState extends State<Cat> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return Dialog(
+              return Dialog(                
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Container(
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                   height: 320,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -127,13 +140,18 @@ class _CatState extends State<Cat> {
                       const SizedBox(height: 15),
                       TextField(
                           controller: designation,
+                          
                           decoration: const InputDecoration(
+
                               prefixIcon: Icon(Icons.description),
+                              
                               border: OutlineInputBorder(
+                                
                                 borderSide: BorderSide(color: Colors.orange),
                               ),
                               hintText: "Designation Categorie",
-                              labelText: "Designation")),
+                              labelText: "Designation")
+                              ),
                       const SizedBox(height: 10),
                       TextField(
                           controller: detail,
@@ -170,6 +188,7 @@ class _CatState extends State<Cat> {
                     ],
                   ),
                 ),
+              
               );
             },
           );
