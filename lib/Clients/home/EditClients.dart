@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:stocktrue/ip.dart';
 // ignore: must_be_immutable
 class EditClients extends StatefulWidget {
   String nom="";
@@ -22,6 +25,32 @@ class _EditClientsState extends State<EditClients> {
   TextEditingController adresse=TextEditingController();
   TextEditingController mail=TextEditingController();
   TextEditingController phone=TextEditingController();
+
+String adress=currentip();  
+
+  Future<void> update() async {
+try {
+  
+  var url="http://$adress/API_VENTE/CLIENT/updateclient.php";
+  //print("onclick");
+var res=await http.post(Uri.parse(url), 
+body: {"noms":nom.text,"adresse":adresse.text,"mail":mail.text,"telephone":phone.text,"id":widget.id }     );
+
+var repoe=jsonDecode(res.body);
+      //var reponse=jsonDecode(res.body);
+      //print(reponse.toString());
+      if(repoe["message"]=="Mise à jour réussie."){
+        print("record updated");
+        //getrecord();
+      }
+      else{
+     print("Error on update");
+      //getrecord();
+      }
+} catch (e) {
+print(e);
+  
+}}
   @override
   void initState() {
     // TODO: implement initState

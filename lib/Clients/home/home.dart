@@ -99,7 +99,7 @@ Future<void> getrecord () async {
                         data[index]["adresse"],
                         data[index]["mail"],
                         data[index]["telephone"],
-                        data[index]["id_client"]
+                        data[index]["id_client"].toString()
                       ));
                     
                   }, 
