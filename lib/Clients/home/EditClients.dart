@@ -25,7 +25,7 @@ class _EditClientsState extends State<EditClients> {
   TextEditingController adresse=TextEditingController();
   TextEditingController mail=TextEditingController();
   TextEditingController phone=TextEditingController();
-
+  
 String adress=currentip();  
 
   Future<void> update() async {
@@ -34,14 +34,24 @@ try {
   var url="http://$adress/API_VENTE/CLIENT/updateclient.php";
   //print("onclick");
 var res=await http.post(Uri.parse(url), 
-body: {"noms":nom.text,"adresse":adresse.text,"mail":mail.text,"telephone":phone.text,"id":widget.id }     );
+body: {
+  "noms":nom.text,
+  "adresse":adresse.text,
+  "mail":mail.text,
+  "telephone":phone.text,
+  "id":widget.id 
+  }     );
 
 var repoe=jsonDecode(res.body);
       //var reponse=jsonDecode(res.body);
       //print(reponse.toString());
+      print('object');
       if(repoe["message"]=="Mise à jour réussie."){
         print("record updated");
         //getrecord();
+      }
+      else if(repoe["error"]=="Paramètres manquants."){
+        print("error");
       }
       else{
      print("Error on update");
@@ -57,7 +67,7 @@ print(e);
     nom.text=widget.nom;
     adresse.text=widget.adress;
     mail.text=widget.mail;
-    phone.text=widget.phone;
+    phone.text=widget.phone;    
     super.initState();
   }
   @override
@@ -128,8 +138,10 @@ print(e);
                           "Confirmer",
                           style: TextStyle(color: Colors.black),
                         ),
-                        onPressed: () {
-                          // savadatas();
+                        onPressed: ()
+                        {
+                          update();
+                          Navigator.pop(context);
                           },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
