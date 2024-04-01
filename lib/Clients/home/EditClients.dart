@@ -65,6 +65,7 @@ var repoe=jsonDecode(res.body);
 print(e);
   
 }}
+
 List data=[];
 Future<void> getrecord () async {
    var url="http://$adress/API_VENTE/CLIENT/getclient.php";
