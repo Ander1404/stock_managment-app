@@ -25,6 +25,7 @@ class _EditClientsState extends State<EditClients> {
   TextEditingController adresse=TextEditingController();
   TextEditingController mail=TextEditingController();
   TextEditingController phone=TextEditingController();
+  TextEditingController code=TextEditingController();
   
 String adress=currentip();  
 
@@ -39,28 +40,47 @@ body: {
   "adresse":adresse.text,
   "mail":mail.text,
   "telephone":phone.text,
-  "id":widget.id 
+  "id":code.text
   }     );
 
 var repoe=jsonDecode(res.body);
       //var reponse=jsonDecode(res.body);
       //print(reponse.toString());
       print('object');
+      getrecord();
       if(repoe["message"]=="Mise à jour réussie."){
         print("record updated");
-        //getrecord();
+
+        getrecord();
       }
       else if(repoe["error"]=="Paramètres manquants."){
         print("error");
+        getrecord();
       }
       else{
      print("Error on update");
-      //getrecord();
+      getrecord();
       }
 } catch (e) {
 print(e);
   
 }}
+List data=[];
+Future<void> getrecord () async {
+   var url="http://$adress/API_VENTE/CLIENT/getclient.php";
+  
+  try{
+    var response=await http.get(Uri.parse(url));    
+    setState(() {
+      data=jsonDecode(response.body);
+      print(data);
+    });          
+  }
+  catch (e){
+    print(e);
+  }
+ }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,6 +88,7 @@ print(e);
     adresse.text=widget.adress;
     mail.text=widget.mail;
     phone.text=widget.phone;    
+    code.text=widget.id;
     super.initState();
   }
   @override
@@ -141,7 +162,12 @@ print(e);
                         onPressed: ()
                         {
                           update();
+                          setState(() {
+                            getrecord();
+                          });
+                          
                           Navigator.pop(context);
+                          
                           },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

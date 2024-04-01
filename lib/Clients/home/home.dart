@@ -63,6 +63,8 @@ Future<void> getrecord () async {
     print(e);
   }
  }
+
+
 @override
   void initState() {
     // TODO: implement initState
@@ -100,7 +102,11 @@ Future<void> getrecord () async {
                         data[index]["mail"],
                         data[index]["telephone"],
                         data[index]["id_client"].toString()
-                      ));
+                      )                      
+                      );
+                      setState(() {
+                        getrecord();
+                      });
                     
                   }, 
                   icon: const Icon(Icons.edit_note_outlined)),
