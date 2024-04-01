@@ -1,21 +1,40 @@
 import 'package:flutter/material.dart';
 
-class EditCat extends StatefulWidget {
-  const EditCat({super.key});
+// ignore: must_be_immutable
+class EditClients extends StatefulWidget {
+  String nom="";
+  String adress="";
+  String mail="";
+  String phone="";
+  String id="";
+   EditClients(
+    this.nom,this.adress,this.mail,this.phone,this.id,
+    {super.key}
+    );
 
   @override
-  State<EditCat> createState() => _EditCatState();
+  State<EditClients> createState() => _EditClientsState();
 }
 
-class _EditCatState extends State<EditCat> {
+class _EditClientsState extends State<EditClients> {
   
   TextEditingController nom=TextEditingController();
   TextEditingController adresse=TextEditingController();
   TextEditingController mail=TextEditingController();
   TextEditingController phone=TextEditingController();
   @override
+  void initState() {
+    // TODO: implement initState
+    nom.text=widget.nom;
+    adresse.text=widget.adress;
+    mail.text=widget.mail;
+    phone.text=widget.phone;
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: const EdgeInsets.only(right: 25,left: 25),
       children: [
                       const SizedBox(
                         height: 20,
@@ -29,7 +48,7 @@ class _EditCatState extends State<EditCat> {
                                 borderSide: BorderSide(color: Colors.orange),
                               ),
                               hintText: "Nom du client", labelText: "Nom")),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 20),
                        TextField(
                           controller: adresse,
                           decoration: const InputDecoration(
@@ -40,7 +59,7 @@ class _EditCatState extends State<EditCat> {
                               ),
                               hintText: "Adresse du client",
                               labelText: "Adresse")),
-                              const SizedBox(height: 25),
+                              const SizedBox(height: 20),
                        TextField(
                           controller: phone,
                           keyboardType: TextInputType.phone,
@@ -52,7 +71,7 @@ class _EditCatState extends State<EditCat> {
                               ),                        
                               hintText: "Contact du client",
                               labelText: "Contact")),
-                              const SizedBox(height: 25),
+                              const SizedBox(height: 20),
                        TextField(
                           controller: mail,                          
                           keyboardType: TextInputType.emailAddress,
@@ -77,7 +96,7 @@ class _EditCatState extends State<EditCat> {
                           color: Colors.black,
                         ),
                         label: const Text(
-                          "Save",
+                          "Confirmer",
                           style: TextStyle(color: Colors.black),
                         ),
                         onPressed: () {

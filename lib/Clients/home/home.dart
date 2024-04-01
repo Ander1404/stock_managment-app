@@ -6,6 +6,7 @@ import '../Hero/hero_details.dart';
 import '../Hero/hero_info.dart';
 import 'Addclient.dart';
 import 'package:http/http.dart' as http;
+import 'EditClients.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -93,8 +94,12 @@ Future<void> getrecord () async {
                 subtitle: Text(data[index]["telephone"]),
                 trailing:  IconButton(
                   onPressed: (){
-                      showModalBottomSheet(context: context, builder: (context)=>ListView(
-                                          
+                      showModalBottomSheet(context: context, builder: (context)=>EditClients(
+                        data[index]["noms"],
+                        data[index]["adresse"],
+                        data[index]["mail"],
+                        data[index]["telephone"],
+                        data[index]["id_client"]
                       ));
                     
                   }, 
