@@ -165,6 +165,7 @@ Future<void> getrecord () async {
                           update();
                           setState(() {
                             getrecord();
+                            // Navigator.pop(context);
                           });
                           
                           Navigator.pop(context);
@@ -181,5 +182,6 @@ Future<void> getrecord () async {
                     ],
                   
     );
+ 
   }
 }
