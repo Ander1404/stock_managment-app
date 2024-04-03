@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:stocktrue/ip.dart';
 // ignore: must_be_immutable
 class Adddetail extends StatefulWidget {
   String idvente='';
@@ -17,40 +20,94 @@ class _AdddetailState extends State<Adddetail> {
   TextEditingController prixu = TextEditingController();
   List<Achatdetail> clients = [];
   Map<String, dynamic> once={};
+  String client="";
+  List data=[];
+  var selectedname;
+  var selectedvalue;
+   var seleccat;
+String adress=currentip();
+Future<void> getrecord () async {
+   var url="http://$adress/API_VENTE/APPROVISIONNEMNT/getapprovisionnement.php";  
+  try{
+    var response=await http.get(Uri.parse(url));
+    setState(() {
+      data=jsonDecode(response.body);
+      print(data);
+    });    
+  }
+  catch (e){
+    print(e);
+  }
+ }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Client Form'),
+        // title: Text('Add Client Form'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              controller: codeproduit,
-              decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.email_outlined),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.orange),
-                              ),
-                            // border: OutlineInputBorder(
-                              
-                            // ),
-                              hintText: "Mail du client",
-                              labelText: "mail"),
-              keyboardType: TextInputType.number,
-            ),
+            // TextField(
+            //   controller: codeproduit,              
+            //   keyboardType: TextInputType.number,
+            // ),
+            DropdownButtonFormField(
+              // items: items, onChanged: onChanged
+            // hint: const Text("Select client"),
+            items:data.map((list){
+                return DropdownMenuItem(   
+                  value: list["CODECLIENT"],
+                  child: Text(list["NOM"]),
+                  );
+          }
+          ).toList(),
+          //onChanged: onChanged,
+          value: selectedvalue,          
+          icon: const Icon(Icons.arrow_drop_down_circle),
+          decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.production_quantity_limits),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.orange),
+                  ),
+                  hintText: "Quantite",
+                  labelText: "Quantite"),
+          onChanged: (value){
+            selectedvalue=value;
+            client=selectedvalue;
+            setState(() {
+              selectedname=selectedvalue;
+            });
+            
+            print(selectedname);
+          },
+              ),
             TextField(
               controller: quantite,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.email_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.orange),
+                  ),
+                  hintText: "Quantite",
+                  labelText: "Quantite"),
             ),
             TextField(
               controller: prixu,
-              decoration: InputDecoration(labelText: 'Address'),
+              decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.monetization_on),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.orange),
+                  ),
+                  hintText: "Prix de l'article",
+                  labelText: "Prix"),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -66,9 +123,9 @@ class _AdddetailState extends State<Adddetail> {
                 quantite.clear();
                 prixu.clear();
               },
-              child: Text('Ajouter'),
+              child: const Text('Ajouter'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Affiche les données au format JSON
