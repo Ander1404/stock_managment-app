@@ -10,8 +10,7 @@ import 'package:http/http.dart' as http;
 
 import '../ip.dart';
 
-class Achats extends StatefulWidget {
-  
+class Achats extends StatefulWidget {  
    const Achats(
     {super.key}   
     );
