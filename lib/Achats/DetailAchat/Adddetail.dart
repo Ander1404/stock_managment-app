@@ -27,7 +27,7 @@ class _AdddetailState extends State<Adddetail> {
    var seleccat;
 String adress=currentip();
 Future<void> getrecord () async {
-   var url="http://$adress/API_VENTE/APPROVISIONNEMNT/getapprovisionnement.php";  
+   var url="http://$adress/API_VENTE/PRODUIT/getproduit.php";  
   try{
     var response=await http.get(Uri.parse(url));
     setState(() {
@@ -50,17 +50,12 @@ Future<void> getrecord () async {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // TextField(
-            //   controller: codeproduit,              
-            //   keyboardType: TextInputType.number,
-            // ),
             DropdownButtonFormField(
-              // items: items, onChanged: onChanged
             // hint: const Text("Select client"),
             items:data.map((list){
                 return DropdownMenuItem(   
-                  value: list["CODECLIENT"],
-                  child: Text(list["NOM"]),
+                  value: list["id_produit"],
+                  child: Text(list["designation"]),
                   );
           }
           ).toList(),
@@ -73,8 +68,8 @@ Future<void> getrecord () async {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(color: Colors.orange),
                   ),
-                  hintText: "Quantite",
-                  labelText: "Quantite"),
+                  hintText: "Produit",
+                  labelText: "Produit"),
           onChanged: (value){
             selectedvalue=value;
             client=selectedvalue;
@@ -112,10 +107,10 @@ Future<void> getrecord () async {
               onPressed: () {
                 setState(() {
                   clients.add(Achatdetail(
-                    codeproduit: int.parse(codeproduit.text),
+                    codeproduit: int.parse(selectedname),
                     quantite: int.parse(quantite.text),
                     prixu: double.parse(prixu.text) ,
-                    codevente: 1
+                    codevente: int.parse(widget.idvente),
                   ));
                 });
                 // Efface les champs après l'ajout

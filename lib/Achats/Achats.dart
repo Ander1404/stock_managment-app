@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:stocktrue/Achats/DetailAchat/Listdetail.dart';
 import 'package:stocktrue/Ventes/AddVentes.dart';
 import 'package:http/http.dart' as http;
 
@@ -158,7 +159,7 @@ Future<void> getrecord () async {
                 elevation: 0.5,
                 child: ListTile(                
                   onTap: (){
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Listdetail(data[index]["fournisseur"])));
                   },
                   // data[index]["id_approvisionnement"]
                   title:  Text(data[index]["fournisseur"],style: const TextStyle(
