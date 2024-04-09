@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:stocktrue/Achats/DetailAchat/Adddetail.dart';
 import 'package:stocktrue/ip.dart';
@@ -143,6 +143,15 @@ String adress=currentip();
     print(e);
   }
  }
+ void showToast(String message) {
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb:2
+      );
+}
+
 @override
   void initState() {
     // TODO: implement initState
