@@ -158,7 +158,7 @@ Future<void> getrecord () async {
                 elevation: 0.5,
                 child: ListTile(                
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Listdetail(data[index]["fournisseur"])));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Listdetail(data[index]["id_approvisionnement"].toString())));
                   },
                   // data[index]["id_approvisionnement"]
                   title:  Text(data[index]["fournisseur"],style: const TextStyle(
