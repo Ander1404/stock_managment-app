@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:stocktrue/Achats/DetailAchat/Adddetail.dart';
 import 'package:stocktrue/ip.dart';
@@ -15,8 +14,21 @@ class Listdetail extends StatefulWidget {
 }
 
 class _ListdetailState extends State<Listdetail> {
+  TextEditingController codevente = TextEditingController();
+  TextEditingController codeproduit = TextEditingController();
+  TextEditingController quantite = TextEditingController();  
+  TextEditingController prixu = TextEditingController();
+  List<Achatdetail> clients = [];
+  Map<String, dynamic> once={};
+  String client="";
+  
+String adress=currentip();
+  List data=[];
+  var selectedname;
+  var selectedvalue;
+   var seleccat;
   late Future<List<Map<String,dynamic>>> _data;
-  String adress=currentip();
+  // String adress=currentip();
   Future<List<Map<String,dynamic>>> fetchdata () async {
     final response=await http.post(
       Uri.parse('http://$adress/API_VENTE/DETAILAPPROVISIONNEMENT/Get.php'),
@@ -143,14 +155,6 @@ String adress=currentip();
     print(e);
   }
  }
- void showToast(String message) {
-  Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb:2
-      );
-}
 
 @override
   void initState() {
@@ -209,9 +213,9 @@ void sms(String ms){
                   labelText: "Produit"),
           onChanged: (value){
             selectedvalue=value;
-            client=selectedvalue;
+            // client=selectedvalue;
             setState(() {
-              selectedname=value;
+              selectedname=value.toString();
             });
             
             print(selectedname);
@@ -260,7 +264,7 @@ void sms(String ms){
                       // quantite: int.parse(quantite.text),
                       // prixu: double.parse(prixu.text) ,
                       // codevente: int.parse(widget.idachat),
-                      codeproduit: 7,
+                      codeproduit: int.parse(selectedname),
                       quantite: int.parse(quantite.text),
                       prixu: double.parse(prixu.text) ,
                       codevente: int.parse(widget.idachat),

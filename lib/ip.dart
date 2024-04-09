@@ -1,7 +1,5 @@
-class Ip {  
-}
-  
+
    String currentip(){
-    String current="192.168.1.74";
+    String current="192.168.215.182";
     return current;
   }
