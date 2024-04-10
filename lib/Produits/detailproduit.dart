@@ -1,30 +1,154 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stocktrue/Produits/editproduit.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+// import 'package:stocktrue/Produits/mobile.dart';
+import 'package:stocktrue/main.dart';
+// import 'package:syncfusion_flutter_pdf/pdf.dart';
 
-class Detail extends StatelessWidget {
-  const Detail({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Detailproduit();
-  }
-}
+import '../ip.dart';
+// ignore: must_be_immutable
 class Detailproduit extends StatefulWidget {
-  const Detailproduit({super.key});
+  String code;
+  String desigantion;
+  // String designation;
+  // String quantite;
+  // String prixu;
+  // String image;
+   Detailproduit(this.code,this.desigantion,{super.key});
 
   @override
   State<Detailproduit> createState() => _DetailproduitState();
 }
 
 class _DetailproduitState extends State<Detailproduit> {
+  //COmment 
+  File? _image;
+var selectedvalue;
+var selectedname;
+TextEditingController nom=TextEditingController();
+String adress=currentip();
+Future<void> savadatas() async {
+    
+    try {
+      var url = "http://$adress/API_VENTE/PRODUIT/insertproduit.php";
+      Uri ulr = Uri.parse(url);
+      var request = http.MultipartRequest('POST', ulr);
+      request.fields['designation'] = nom.text;
+      request.fields['categorie_id'] = "1";
+      request.files.add(http.MultipartFile.fromBytes(
+          'image1', File(_image!.path).readAsBytesSync(),
+          filename: _image!.path));
+      var res = await request.send();
+      var response = await http.Response.fromStream(res);
+
+      if (response.statusCode == 200) {
+        bar("Success insert");
+      } else {
+        bar("Error insert");
+      }
+    } catch (e) {
+      bar(e.toString());
+      print(e);
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      print('Erreur lors de la sélection de l\'image : $e');
+    }
+  }
+  void bar(String description){
+    ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+          content: Text(description),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+  }
+  List d=[];
+  Future<void> getrecord() async {
+    var url = "http://$adress/API_VENTE/CATEGORIEPROD/getcategorie.php";
+    try {
+      var response = await http.get(Uri.parse(url));
+      setState(() {
+        d = jsonDecode(response.body);
+        print(d);
+        // status = 'Success';
+      });
+        
+      // } else {}
+    } catch (e) {
+      print(e);
+    }
+  }
+  
+  //Else one
+  List dataens = [];
+// String adress=currentip();
+  Future<void> getrecords() async {
+    var url="http://$adress/API_VENTE/PRODUIT/gettrie.php";  
+ final response=await http.post(
+      Uri.parse(url),
+      body: {
+        "id":widget.code
+      }
+      );          
+      if(response.statusCode==200){
+        setState(() {
+          dataens=jsonDecode(response.body)as List;
+        });
+        // final data=
+      }
+      else{
+        throw Exception('Failed to load data');
+      }
+  }
+  Future <void> delrecord() async{
+    var url="http://$adress/API_VENTE/PRODUIT/deleteproduit.php";  
+ final response=await http.post(
+      Uri.parse(url),
+      body: {
+        "id_produit":widget.code
+      }
+      );          
+      if(response.statusCode==200){
+        print("Success delete");        // final data=
+      }
+      else{
+        throw Exception('Failed to load data');
+      }
+  }
+ @override
+  void initState() {
+    // TODO: implement initState
+    getrecord();
+    getrecords();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    
+    // final sreenh = MediaQuery.of(context).size.height;
+    // final sreenw = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Produits"),
+        title: Text(widget.desigantion),
       ),
       body: SafeArea(        
-        child: SingleChildScrollView(
+        child: dataens.isEmpty?const CircularProgressIndicator():
+        SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,       
                
@@ -54,22 +178,23 @@ class _DetailproduitState extends State<Detailproduit> {
                 child: Column(
                   children: [
                     const SizedBox(height: 5,),
-                    Container(
-          
+                    Container(          
                        height: 195,
                           width: 160,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
-                            image: const DecorationImage(
+                            image:  DecorationImage(
                               fit: BoxFit.fill,
                               image: NetworkImage(
-                                  "https://th.bing.com/th/id/OIP.bGj-6jWQm4G2URDXNCvwnAHaHa?rs=1&pid=ImgDetMain"),
+                                  // ignore: prefer_interpolation_to_compose_strings
+                                  "http://$adress/API_VENTE/PRODUIT/"+dataens[0]["image"]
+                                  ),
                             ),
                           )
                     ),
                     const SizedBox(height: 5,),
-                    const Text("Chaises",
-                    style: TextStyle(
+                     Text(dataens[0]["designation"],
+                    style: const TextStyle(
                       fontSize: 23,
                       fontWeight: FontWeight.bold,                    
                     ),
@@ -83,31 +208,32 @@ class _DetailproduitState extends State<Detailproduit> {
                     ),
                     const SizedBox(height: 5,),
                     
-                    const Row(
+                      Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Quantite actuel :",
+                        // ignore: prefer_interpolation_to_compose_strings
+                        const Text("Quantite actuel :",
                         style: TextStyle(
                           fontWeight: FontWeight.normal
                         ),
                         ),
-                        Text("15",
-                        style: TextStyle(
+                        Text(dataens[0]["quantite"].toString(),
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold
                         ),)
                       ],
                     ),
                     const SizedBox(height: 5,),
-                    const Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Prix d'achat actuel :",
+                        const Text("Prix d'achat actuel :",
                         style: TextStyle(
                           fontWeight: FontWeight.normal
                         ),
                         ),
-                        Text("15",
-                        style: TextStyle(
+                        Text(dataens[0]["prixu"].toString(),
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold
                         ),)
                       ],
@@ -115,32 +241,61 @@ class _DetailproduitState extends State<Detailproduit> {
                     
                     const SizedBox(height: 5,),
                     Row(
+
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [       
                                     
-                        ElevatedButton(
-                          onPressed: (){}, 
+                        IconButton(
+                          icon: const Icon(Icons.edit_square),
+                          onPressed: (){
+                            showDialog(
+                              context: context, 
+                              builder: (BuildContext context){
+                                  return Dialog(                                
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Container(
+                   padding: const EdgeInsets.all(20.0),
+                  height: 320,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: ListView(
+                    children: [
+                            
+
+                    ],
+                  )
+                )
+                );
+                              }
+                              );
+                          }, 
+                          color: Colors.white,
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             backgroundColor: const Color.fromARGB(255, 16, 131, 33),
-                            shadowColor: Colors.orange[1000],
+                            // shadowColor: Colors.orange[1000],
                             
                             shape: RoundedRectangleBorder(                            
                                 borderRadius: BorderRadius.circular(8),
                                 
                                 ),
                           ),
-                          child: const Text(
-                            "Buy",
-                            style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              color: Colors.white),
-                          )
                           ),
-                          ElevatedButton(
-                          onPressed: (){}, 
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                          onPressed: (){
+                            delrecord(
+                              
+                            );
+                            Navigator.pushAndRemoveUntil(
+            context, 
+            CupertinoPageRoute(builder: (context)=>const Homescreen()), (Route<dynamic>route)=>false,);
+                          }, 
+                          color: Colors.white,
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             backgroundColor: Colors.redAccent,
@@ -150,15 +305,6 @@ class _DetailproduitState extends State<Detailproduit> {
                                 
                                 ),
                           ),
-                          child: const Text(
-                            "Sell",
-                            style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              color: Colors.white
-                              ),
-                          )
                           ),
           
                       ],
@@ -170,60 +316,6 @@ class _DetailproduitState extends State<Detailproduit> {
                 
               ),
               const SizedBox(height: 5,),
-            const SizedBox(height: 5,),
-              Container(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  
-                  children: [
-                    
-                ElevatedButton(
-                  
-                    onPressed: () {
-                      Navigator.push(context,
-                                      MaterialPageRoute(builder: (context)=>Editproduct())
-                                  );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: const Color.fromARGB(255, 16, 131, 33),
-                      shadowColor: Colors.orange[1000],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      "Modify",
-                      style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          color: Colors.white),
-                    )),
-                ElevatedButton(
-                    onPressed: () {},
-                    
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Colors.redAccent,
-                      shadowColor: Colors.orange[1000],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      "Delete",
-                      
-                      style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          color: Colors.white),
-                    )),
-                                ],
-                              ),
-              ),
               
               const SizedBox(height: 10,),
               const Text("Listes des derniers operations",

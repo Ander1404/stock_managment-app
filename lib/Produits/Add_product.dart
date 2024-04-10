@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:stocktrue/Paternars.dart';
+import 'package:stocktrue/ip.dart';
 class Addproduct extends StatefulWidget {
   const Addproduct({super.key});
 
@@ -16,26 +18,18 @@ class Addproduct extends StatefulWidget {
 class AddproductState extends State<Addproduct> {
 
  File? _image;
-String selectedvalue='';
+var selectedvalue;
+var selectedname;
+String adress=currentip();
+List d=[];
   Future<void> savadatas() async {
-    // if (nom.text.isEmpty ||
-    //     detail.text.isEmpty ||
-    //     source.text.isEmpty ||
-    //     dateN.text.isEmpty) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text('Vous avez un champ vide'),
-    //       duration: Duration(seconds: 3),
-    //     ),
-    //   );
-    //   return;
-    // }
+    
     try {
-      var url = "http://$adress/API_VENTE/PRODUIT/getproduit.php";
+      var url = "http://$adress/API_VENTE/PRODUIT/insertproduit.php";
       Uri ulr = Uri.parse(url);
       var request = http.MultipartRequest('POST', ulr);
-      request.fields['titre'] = nom.text;
-      request.fields['cat'] = desc.text;
+      request.fields['designation'] = nom.text;
+      request.fields['categorie_id'] = "1";
       request.files.add(http.MultipartFile.fromBytes(
           'image1', File(_image!.path).readAsBytesSync(),
           filename: _image!.path));
@@ -43,11 +37,12 @@ String selectedvalue='';
       var response = await http.Response.fromStream(res);
 
       if (response.statusCode == 200) {
-        print("Success insert");
+        bar("Success insert");
       } else {
-        print("Error insert");
+        bar("Error insert");
       }
     } catch (e) {
+      bar(e.toString());
       print(e);
     }
   }
@@ -64,12 +59,40 @@ String selectedvalue='';
       print('Erreur lors de la sélection de l\'image : $e');
     }
   }
+  void bar(String description){
+    ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+          content: Text(description),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+  }
+  Future<void> getrecord() async {
+    var url = "http://$adress/API_VENTE/CATEGORIEPROD/getcategorie.php";
+    try {
+      var response = await http.get(Uri.parse(url));
+      setState(() {
+        d = jsonDecode(response.body);
+        print(d);
+        status = 'Success';
+      });
+        
+      // } else {}
+    } catch (e) {
+      print(e);
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    getrecord();
+    super.initState();
+  }
   TextEditingController nom=TextEditingController();
   TextEditingController desc=TextEditingController();
   @override
   Widget build(BuildContext context) {
     final sreenh = MediaQuery.of(context).size.height;
-    // User? user = FirebaseAuth.instance.currentUser;
     final sreenw = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(title: const Text(
@@ -80,25 +103,54 @@ String selectedvalue='';
           fontWeight: FontWeight.bold,          
         ),
         )),
-      body: ListView.builder(
-          itemCount: 1, // Number of items in the list
-          itemBuilder: (context, index) {
-            return Column(
+      body: ListView(
+          children: [
+            Column(
               children: [
                 Container(
                   padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Column(
                     children: [
-                      const TextField(
-                          controller: null,
-                          decoration: InputDecoration(
+                      const SizedBox(height: 5,),
+                       TextField(
+                          controller: nom,
+                          decoration:const InputDecoration(
+                            prefixIcon: Icon(Icons.description),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.orange),
+                              ),
                               hintText: "Nom du produits", labelText: "Nom")),
                       const SizedBox(height: 25),
-                      const TextField(
-                          controller: null,
-                          decoration: InputDecoration(
-                              hintText: "Description du produits",
-                              labelText: "Description")),
+                      DropdownButtonFormField(
+            items:d.map((list){
+                return DropdownMenuItem(   
+                  value: list["id_categorie"],
+                  child: Text(list["desigantion"]),
+                  );
+          }
+          ).toList(),
+          //onChanged: onChanged,
+          
+          value: selectedvalue,          
+          icon: const Icon(Icons.arrow_drop_down_circle),
+          decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.category_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.orange),
+                  ),
+                  hintText: "Categorie",
+                  labelText: "Categorie"),
+          onChanged: (value){
+            selectedvalue=value;
+            // client=selectedvalue;
+            setState(() {
+              selectedname=value.toString();
+            });
+            
+            print(selectedname);
+          },
+              ),
                       const SizedBox(
                         height: 25,
                       ),
@@ -108,41 +160,23 @@ String selectedvalue='';
                         //     CouleurPrincipale, // Définir la couleur du bouton
                         // Autres propriétés de style du bouton peuvent être définies ici
                       ),
-                      child: Text(
-                        "la photo1",
+                      child: const Text(
+                        "Chosir la photo",
                         // style: TitreStyleWhite,
                       ),
                       onPressed: () => _pickImage(ImageSource.gallery),
                     ),
                       const SizedBox(
-                        height: 25,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: Colors.orange[800],
-                          fixedSize: const Size(350, 45),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                        child: const Text(
-                          'Save',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            
-                          ),
-                        ),
-                      ),
+                        height: 2,
+                      ),                      
                       Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,                  
                   children: [
                     GestureDetector(
                       onTap: () => _pickImage(ImageSource.gallery),
                       child: SizedBox(
-                        height: sreenh * 0.2,
+                        height: sreenh * 0.35,
                         width: sreenw * 0.45,
                         child: Center(
                           child: _image == null
@@ -153,24 +187,53 @@ String selectedvalue='';
                                     border: Border.all(
                                       color:
                                           Colors.black26, // Couleur de la bordure
-                                      width: 1.0, // Épaisseur de la bordure
+                                      width: 3.0, // Épaisseur de la bordure
                                     ),
                                   ),
-                                  child: const Center(
-                                    child: Text('Aucune image sélectionnée'),
+                                  child: const Center(                                    
+                                    child: Center(
+                                      child: Text('Aucune image sélectionnée'),
+                                    ),
                                   ),
                                 )
                               : Image.file(_image!),
                         ),
                       ),
                     ),
-                  ])
+                  ]),
+                  const SizedBox(height: 10,),
+                  ElevatedButton(
+                        onPressed: () {
+                          savadatas();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: const Color.fromARGB(255, 229, 184, 147),
+                          fixedSize: const Size(350, 45),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
+                        child: const Text(
+                          'Save',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold
+                            
+                          ),
+                        ),
+                      ),
+                      
                     ],
                   ),
                 ),
               ],
-            );
-          }),
+            )
+          
+          ],
+             
+          ),
+    
     );  
   
   

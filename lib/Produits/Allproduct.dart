@@ -1,9 +1,12 @@
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:stocktrue/Produits/detailproduit.dart';
+import 'package:stocktrue/ip.dart';
 import 'Add_product.dart';
-
+import 'package:http/http.dart' as http;
 class Allproduct extends StatefulWidget {
   const Allproduct({Key? key}) : super(key: key);
   @override
@@ -15,9 +18,22 @@ class _AllproductState extends State<Allproduct> {
   @override
   void initState() {
     super.initState();
+    getrecord();
   }
-
-
+  List dataens = [];
+String adress=currentip();
+Future<void> getrecord() async {
+    var url="http://$adress/API_VENTE/PRODUIT/getproduit.php";  
+ try {
+      var response = await http.get(Uri.parse(url));
+      setState(() {
+        dataens = jsonDecode(response.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final double height=MediaQuery.of(context).size.height;
@@ -27,141 +43,148 @@ class _AllproductState extends State<Allproduct> {
           color:Colors.white,
           child: SafeArea(
               child:
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          //debugPrint(article.img.toString());
-                          SizedBox(height: height*0.02,),
-                        GestureDetector(
-                                onTap:(){
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context)=>Detailproduit())
-                                  );
-                                },
-                                child:Container(                                
-                                    padding: const EdgeInsets.only(left: 10, right: 10),
-                                    height: 250,
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                            top:35,
-                                            child: Material (
-                                                elevation: 0.0,
-                                                child: Container(
-                                                  height: 180.0,
-                                                  width: width*0.91,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color: Colors.grey.withOpacity(0.3),
-                                                          offset: const Offset(0.0, 0.0),
-                                                          blurRadius: 20.0,
-                                                          spreadRadius: 4.0)],
-                                                  ),
-                                                  //child: Text("This is where your content goes")
-                                                )
-                                            )
-                                        ),
-                                        Positioned(
-                                            top:0,
-                                            left: 10,
-                                            child: Card(
-                                                elevation: 10.0,
-                                                shadowColor: Colors.grey.withOpacity(0.5),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(15.0),
-                                                ),
-                                                child:Container(
-                                                    height: 195,
-                                                    width: 140,
-                                                    decoration:BoxDecoration(
-                                                      borderRadius:BorderRadius.circular(10.0),
-                                                      image:  const DecorationImage(
-                                                        fit:BoxFit.fill,
-                                                        image:NetworkImage("https://th.bing.com/th/id/OIP.bGj-6jWQm4G2URDXNCvwnAHaHa?rs=1&pid=ImgDetMain"),
-                                                      ),
-                                                    )
-        
-                                                )
-                                            )
-                                        ),
-                                        Positioned(
-                                            top:45,
-                                            left: height*0.22,
+              ListView.builder(
+                  itemCount: dataens.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context,index) {
+                    return dataens.isEmpty?const CircularProgressIndicator():
+                    GestureDetector(
+                            onTap:(){
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context)=>Detailproduit(
+                                    dataens[index]["id_produit"].toString(),
+                                    dataens[index]["designation"].toString()
+                                    
+                                    ))
+                              );
+                            },
+                            child:Container(                                
+                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                height: 250,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        top:35,
+                                        child: Material (
+                                            elevation: 0.0,
                                             child: Container(
-                                                height: 200,
-                                                width: 150,
-                                                child:Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                        "Chaise",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                        color:Colors.black
-                                                        ),
-                                                        
+                                              height: 165.0,
+                                              width: width*0.91,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(10.0),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.3),
+                                                      offset: const Offset(0.0, 0.0),
+                                                      blurRadius: 20.0,
+                                                      spreadRadius: 4.0)],
+                                              ),
+                                              //child: Text("This is where your content goes")
+                                            )
+                                        )
+                                    ),
+                                    Positioned(
+                                        top:0,
+                                        left: 10,
+                                        child: Card(
+                                            elevation: 10.0,
+                                            shadowColor: Colors.grey.withOpacity(0.5),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(15.0),
+                                            ),
+                                            child:Container(
+                                                height: 170,
+                                                width: 140,
+                                                decoration:BoxDecoration(
+                                                  borderRadius:BorderRadius.circular(10.0),
+                                                  image:  DecorationImage(
+                                                    fit:BoxFit.fill,
+                                                    // ignore: prefer_interpolation_to_compose_strings
+                                                    image:NetworkImage("http://$adress/API_VENTE/PRODUIT/"+dataens[index]["image"]),
+                                                  ),
+                                                )
+                            
+                                            )
+                                        )
+                                    ),
+                                    Positioned(
+                                        top:45,
+                                        left: height*0.22,
+                                        child: SizedBox(
+                                            height: 200,
+                                            width: 150,
+                                            child:Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                 Text(
+                                                    dataens[index]["designation"],
+                                                    style: const TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight: FontWeight.bold,
+                                                    color:Colors.black
                                                     ),
                                                     
-                                                    Divider(
-                                                        color:Colors.orange
+                                                ),
+                                                
+                                                const Divider(
+                                                    color:Colors.orange
+                                                ),
+                                                Text(
+                                                    // ignore: prefer_interpolation_to_compose_strings
+                                                    "Quantite: "+dataens[index]["quantite"].toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                    color:Colors.black
                                                     ),
-                                                    Text(
-                                                        "Quantite: width",
-                                                        style: const TextStyle(
-                                                          fontSize: 15,
-                                                        color:Colors.black
-                                                        ),
-                                                        
+                                                    
+                                                ),
+                                                Text(
+                                                    // ignore: prefer_interpolation_to_compose_strings
+                                                    "Prix :${dataens[index]["prixu"].toString()}",
+                                                    style: const TextStyle(
+                                                      fontSize: 17,
+                                                    color:Colors.grey
                                                     ),
-                                                    Text(
-                                                        "Prix : height",
-                                                        style: const TextStyle(
-                                                          fontSize: 17,
-                                                        color:Colors.grey
-                                                        ),
-                                                        
+                                                    
+                                                ),
+                                                Text(
+                                                    "Type :${dataens[index]["categorie"]}",
+                                                    style: const TextStyle(
+                                                      fontSize: 17,
+                                                    color: Color.fromARGB(255, 102, 101, 101)
                                                     ),
-                                                    Text(
-                                                        "Prix : height",
-                                                        style: TextStyle(
-                                                          fontSize: 17,
-                                                        color:Colors.grey
-                                                        ),
-                                                        
-                                                    ),
-                                                    const Divider(
-                                                        color:Colors.orange
-                                                    ),
-                                                  ],
-                                                )
+                                                    
+                                                ),
+                                                const Divider(
+                                                    color:Colors.orange
+                                                ),
+                                              ],
                                             )
-                                        ),
-                                        Positioned(
-                                          top: 165,
-                                          left: width*0.78,
-                                          child: IconButton(onPressed: (){}, 
-                                          icon: const Icon(Icons.delete_outline)
-                                          
-                                          ))
-                                      ],
-                                    )
+                                        )
+                                    ),
+                              //       Positioned(
+                              //         top: 32,
+                              //         left: width*0.74,
+                              //         child: IconButton(onPressed: (){
+                              //           Navigator.push(context,
+                              //     MaterialPageRoute(builder: (context)=>Ediproduct())
+                              // );
+                              //         }, 
+                              //         icon: const Icon(Icons.edit_square,
+                              //         size: 27,
+                              //         color: Color.fromARGB(255, 6, 35, 12),
+                              //         )
+                                      
+                              //         )
+                              //         )
+                                  ],
                                 )
-                            
-                            ),
-                        ]
-                      ),
-
-                    ),
-                  ),
-                ],
-              )
+                            )
+                        
+                        );
+                  }
+                )
           ),
         ),
     floatingActionButton: FloatingActionButton(

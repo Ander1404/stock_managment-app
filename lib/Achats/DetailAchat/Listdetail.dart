@@ -2,10 +2,13 @@ import 'dart:convert';
 // import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 // import 'package:image_picker/image_picker.dart';
 import 'package:stocktrue/Achats/DetailAchat/Adddetail.dart';
+import 'package:stocktrue/Produits/mobile.dart';
 import 'package:stocktrue/ip.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 // ignore: must_be_immutable
 class Listdetail extends StatefulWidget {
   String code;
@@ -30,6 +33,7 @@ String adress=currentip();
   var selectedvalue;
    var seleccat;
   late Future<List<Map<String,dynamic>>> _data;
+  // final Future<List<Map<String,dynamic>>> _data2= await fetchdata();
   // String adress=currentip();
   Future<List<Map<String,dynamic>>> fetchdata () async {
     final response=await http.post(
@@ -47,6 +51,80 @@ String adress=currentip();
       }
     
   }
+  
+// PDF
+Future<void> _createPDF(String date, String nom, String code) async {
+  List m=await fetchdata();
+    PdfDocument document = PdfDocument();
+    final page = document.pages.add();
+
+    page.graphics.drawString('Facture \n Nom:$nom \n Date:$date \n Code:$code  ',
+        PdfStandardFont(PdfFontFamily.helvetica, 12),
+        
+        );
+        // const SizedBox(height: 12,);
+        // page.graphics.drawString('\n Nom: $nom',
+        // PdfStandardFont(PdfFontFamily.helvetica, 17),
+        
+        // );
+        // const SizedBox(height: 12,);
+        // page.graphics.drawString('\n Date: $date',
+        // PdfStandardFont(PdfFontFamily.helvetica, 17),
+        
+        // );
+        // const SizedBox(height: 12,);
+        // page.graphics.drawString('\n Code: $code',
+        // PdfStandardFont(PdfFontFamily.helvetica, 17),
+        
+        // );
+
+    // page.graphics.drawImage(
+    //     PdfBitmap(await _readImageData('Pdf_Succinctly.jpg')),
+    //     Rect.fromLTWH(0, 100, 440, 550));
+
+    // PdfGrid grid = PdfGrid();
+    // grid.style = PdfGridStyle(
+    //     font: PdfStandardFont(PdfFontFamily.helvetica, 30),
+    //     cellPadding: PdfPaddings(left: 5, right: 2, top: 2, bottom: 2));
+
+    // grid.columns.add(count: 3);
+    // grid.headers.add(1);
+
+   // PdfGridRow header = grid.headers[0];
+    // header.cells[0].value = 'Roll No';
+    // header.cells[1].value = 'Name';
+    // header.cells[2].value = 'Class';
+
+    // PdfGridRow row = grid.rows.add();
+    // row.cells[0].value = '1';
+    // row.cells[1].value = 'Arya';
+    // row.cells[2].value = '6';
+
+    // row = grid.rows.add();
+    // row.cells[0].value = '2';
+    // row.cells[1].value = 'John';
+    // row.cells[2].value = '9';
+
+    // row = grid.rows.add();
+    // row.cells[0].value = '3';
+    // row.cells[1].value = 'Tony';
+    // row.cells[2].value = '8';
+
+    // grid.draw(
+    //     page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
+
+
+
+    List<int> bytes =await document.save();
+    document.dispose();
+
+    saveAndLaunchFile(bytes, 'Output.pdf');
+  }
+Future<Uint8List> _readImageData(String name) async {
+  final data = await rootBundle.load('images/$name');
+  return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+}
+ 
   @override
   void initState() {
     // TODO: implement initState
@@ -82,18 +160,6 @@ Future <void> savadatas() async{
       }
 }
 
- Future <void> savadatass() async{
-  
-    var url="http://$adress/API_VENTE/DETAILAPPROVISIONNEMENT/postapp.php";
-    Uri ulr=Uri.parse(url);
-await http.post(ulr,body: {
-  "vente_id":widget.code,
-  "produit_id:":selectedname,
-  "quantite":quantite.text,
-  "prixu":prixu.text
-});
-    print("in");//Map <String, String> body = {"name":txtnom.text,"pass":pass.text,"roles":role.text};
-}
 
 Future<void> getrecord () async {
    var url="http://$adress/API_VENTE/PRODUIT/getproduit.php";  
@@ -126,6 +192,10 @@ Future<void> getrecord () async {
                             fontWeight: FontWeight.w100,                                          
                           ),                  
                           ),
+                          IconButton(onPressed: (){
+                            _createPDF("date", "nom", "code");
+                          }, icon: const Icon(Icons.print)),
+                          
                     IconButton(
                     onPressed: (){
                       
@@ -157,7 +227,11 @@ Future<void> getrecord () async {
             const SizedBox(height: 25,),
             DropdownButtonFormField(
             // hint: const Text("Select client"),
+          //  if(){}
             items:data.map((list){
+              if(data.isEmpty){
+                // return Circ;
+              }
                 return DropdownMenuItem(   
                   value: list["id_produit"],
                   child: Text(list["designation"]),
@@ -186,6 +260,7 @@ Future<void> getrecord () async {
             print(selectedname);
           },
               ),
+             
               const SizedBox(height: 10),
             TextField(
               controller: quantite,
@@ -231,7 +306,6 @@ Future<void> getrecord () async {
                     //   prixu: double.parse(prixu.text) ,
                     //   codevente: int.parse(widget.code),
                     // ));
-                    savadatass();
                     });                    
                   }
                   // Efface les champs après l'ajout
@@ -244,16 +318,6 @@ Future<void> getrecord () async {
               const SizedBox(width: 15,),
               ElevatedButton(
                 onPressed: () {
-                  // Affiche les données au format JSON
-                  // print(clients.map((client) => client.toJson()).toList());
-                  // print(clients);
-                  
-                  // List j=clients.map((e) => e.toJson()).toList();
-                  // print(j);
-                       print(selectedname);
-                       print(quantite.text);
-                       print(prixu.text);
-                       print(widget.code);
                   setState(() {
                     savadatas();
                   });         
