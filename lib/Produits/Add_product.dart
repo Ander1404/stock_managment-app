@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 //import 'package:image_picker/image_picker.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:stocktrue/Paternars.dart';
 class Addproduct extends StatefulWidget {
   const Addproduct({super.key});
 
@@ -9,14 +14,63 @@ class Addproduct extends StatefulWidget {
 }
 
 class AddproductState extends State<Addproduct> {
-  // Future<XFile?> pickImage(ImageSource source) async {
-  //   final ImagePicker picker = ImagePicker();
-  //   final XFile? image = await picker.pickImage(source: source);
-  //   return image;
-  // }
 
+ File? _image;
+String selectedvalue='';
+  Future<void> savadatas() async {
+    // if (nom.text.isEmpty ||
+    //     detail.text.isEmpty ||
+    //     source.text.isEmpty ||
+    //     dateN.text.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text('Vous avez un champ vide'),
+    //       duration: Duration(seconds: 3),
+    //     ),
+    //   );
+    //   return;
+    // }
+    try {
+      var url = "http://$adress/API_VENTE/PRODUIT/getproduit.php";
+      Uri ulr = Uri.parse(url);
+      var request = http.MultipartRequest('POST', ulr);
+      request.fields['titre'] = nom.text;
+      request.fields['cat'] = desc.text;
+      request.files.add(http.MultipartFile.fromBytes(
+          'image1', File(_image!.path).readAsBytesSync(),
+          filename: _image!.path));
+      var res = await request.send();
+      var response = await http.Response.fromStream(res);
+
+      if (response.statusCode == 200) {
+        print("Success insert");
+      } else {
+        print("Error insert");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      print('Erreur lors de la sélection de l\'image : $e');
+    }
+  }
+  TextEditingController nom=TextEditingController();
+  TextEditingController desc=TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final sreenh = MediaQuery.of(context).size.height;
+    // User? user = FirebaseAuth.instance.currentUser;
+    final sreenw = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(title: const Text(
         'New Product',
@@ -48,35 +102,18 @@ class AddproductState extends State<Addproduct> {
                       const SizedBox(
                         height: 25,
                       ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        // async {
-                        //   final XFile? image = await pickImage(
-                        //       ImageSource.camera); // Choose source here
-                        //   if (image != null) {
-                        //     // Handle the picked image: display it, upload it, etc.
-                        //     // Use image.path to access the image file path
-                        //   }
-                        // },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: Colors.white,
-                          shadowColor: Colors.orange[1000],
-                          
-                          shape: RoundedRectangleBorder(
-                            
-                              borderRadius: BorderRadius.circular(8),
-                              
-                              ),
-                        ),
-                        child: const Text(
-                          'Pick Image',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
+                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        // primary:
+                        //     CouleurPrincipale, // Définir la couleur du bouton
+                        // Autres propriétés de style du bouton peuvent être définies ici
                       ),
+                      child: Text(
+                        "la photo1",
+                        // style: TitreStyleWhite,
+                      ),
+                      onPressed: () => _pickImage(ImageSource.gallery),
+                    ),
                       const SizedBox(
                         height: 25,
                       ),
@@ -98,6 +135,36 @@ class AddproductState extends State<Addproduct> {
                           ),
                         ),
                       ),
+                      Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => _pickImage(ImageSource.gallery),
+                      child: SizedBox(
+                        height: sreenh * 0.2,
+                        width: sreenw * 0.45,
+                        child: Center(
+                          child: _image == null
+                              ? Container(
+                                  width: 200,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color:
+                                          Colors.black26, // Couleur de la bordure
+                                      width: 1.0, // Épaisseur de la bordure
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text('Aucune image sélectionnée'),
+                                  ),
+                                )
+                              : Image.file(_image!),
+                        ),
+                      ),
+                    ),
+                  ])
                     ],
                   ),
                 ),
