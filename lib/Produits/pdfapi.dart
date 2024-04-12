@@ -30,7 +30,7 @@ class Pdfapi{
     headerrow.cells[2].value("Date de la ceremonie:$date");
     headerrow.cells[3].value("Code de la ceremonie:$codereser");
 
-    headerrow.style.font=PdfStandardFont(PdfFontFamily.helvetica, 10,style: PdfFontStyle.bold);
+    // headerrow.style.font=PdfStandardFont(PdfFontFamily.helvetica, 10,style: PdfFontStyle.bold);
 
     final row=grid.rows.add();
     row.cells[0].value="15-09-2021";

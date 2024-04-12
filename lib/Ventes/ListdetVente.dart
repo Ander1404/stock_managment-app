@@ -1,30 +1,27 @@
 import 'dart:convert';
-// import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-// import 'package:image_picker/image_picker.dart';
-import 'package:stocktrue/Achats/DetailAchat/Adddetail.dart';
 import 'package:stocktrue/Produits/mobile.dart';
 import 'package:stocktrue/ip.dart';
+import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 // ignore: must_be_immutable
-class Listdetail extends StatefulWidget {
+class Lisventedet extends StatefulWidget {
   String code;
-  Listdetail(this.code, {super.key});
+  Lisventedet(this.code,{super.key});
 
   @override
-  State<Listdetail> createState() => _ListdetailState();
+  State<Lisventedet> createState() => _LisventedetState();
 }
 
-class _ListdetailState extends State<Listdetail> {
+class _LisventedetState extends State<Lisventedet> {
   TextEditingController codevente = TextEditingController();
   TextEditingController codeproduit = TextEditingController();
   TextEditingController quantite = TextEditingController();  
   TextEditingController prixu = TextEditingController();
-  List<Achatdetail> clients = [];
+  // List<Achatdetail> clients = [];
   Map<String, dynamic> once={};
   String client="";
   
@@ -34,17 +31,42 @@ String adress=currentip();
   var selectedvalue;
    var seleccat;
   late Future<List<Map<String,dynamic>>> _data;
-  // final Future<List<Map<String,dynamic>>> _data2= await fetchdata();
-  // String adress=currentip();
-  Future<List<Map<String,dynamic>>> fetchdata () async {
+  // late Future<List<Map<String,dynamic>>> _datas;
+  List _datas=[];
+   Future<void> fetchdataS () async {
     final response=await http.post(
-      Uri.parse('http://$adress/API_VENTE/DETAILAPPROVISIONNEMENT/Get.php'),
+      Uri.parse('http://$adress/API_VENTE/DETAILVENTE/Get.php'),
       body: {
         "id":widget.code
       }
       );          
       if(response.statusCode==200){
         final data=jsonDecode(response.body)as List;
+        setState(() {
+          // _datas=data as Future<List<Map<String, dynamic>>>;
+          // _datas= data.cast<Map<String,dynamic>>() as Future<List<Map<String, dynamic>>>;
+          _datas=data;
+          print(_datas);
+        });
+         
+      }
+      else{
+        throw Exception('Failed to load data');
+      }
+    
+  }
+   Future<List<Map<String,dynamic>>> fetchdata () async {
+    final response=await http.post(
+      Uri.parse('http://$adress/API_VENTE/DETAILVENTE/Get.php'),
+      body: {
+        "id":widget.code
+      }
+      );          
+      if(response.statusCode==200){
+        final data=jsonDecode(response.body)as List;
+        setState(() {
+          _datas=data;
+        });
         return data.cast<Map<String,dynamic>>();
       }
       else{
@@ -53,8 +75,7 @@ String adress=currentip();
     
   }
   
-// PDF
-Future<void> _createPDF(String date, String nom, String code) async {
+  Future<void> _createPDF(String date, String nom, String code) async {
   List m=await fetchdata();
     PdfDocument document = PdfDocument();
     final page = document.pages.add();
@@ -165,24 +186,23 @@ Future<Uint8List> _readImageData(String name) async {
   final data = await rootBundle.load('images/$name');
   return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 }
- 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _data=fetchdata();
-    getrecord();
-  }
-  void sms(String ms){
+ void sms(String ms){
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(content: Text(ms),
     duration: const Duration(seconds: 1),
     ));
 }
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _data=fetchdata();
+    fetchdataS();
+    getrecord();
+  }
 
- 
 Future <void> savadatas() async{  
-    var url="http://$adress/API_VENTE/DETAILAPPROVISIONNEMENT/postapp.php";
+    var url="http://$adress/API_VENTE/DETAILVENTE/insertdetailvente.php";
     // var t="http://192.168.215.182/API_VENTE/DETAILAPPROVISIONNEMENT/postapp.php";
     Uri ulr=Uri.parse(url);
     var request = http.MultipartRequest('POST', ulr);
@@ -194,8 +214,10 @@ Future <void> savadatas() async{
       var response = await http.Response.fromStream(res);
       if (response.statusCode == 200) {
         // showToast(msg: "Succès !");
-        _data= fetchdata();
-        print('Success');
+        fetchdataS();
+        setState(() {
+          _data= fetchdata();
+        });
       } else {
         print("error"); 
       }
@@ -217,7 +239,6 @@ Future<void> getrecord () async {
  }
   @override
   Widget build(BuildContext context) {
-    // User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(toolbarHeight: 30,),
       body: ListView(
@@ -227,14 +248,15 @@ Future<void> getrecord () async {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,              
                   children: [
-                    const Text("Details de l'achat",
+                    const Text("Details de la vente",
                           style: TextStyle(                      
                             fontSize: 17,
-                            fontWeight: FontWeight.w100,                                          
+                            fontWeight: FontWeight.w800,                                          
                           ),                  
                           ),
                           IconButton(onPressed: (){
-                            _createPDF("date", "nom", "code");
+                            String v= DateTime.now.toString();
+                            _createPDF(v, "nom", "code");
                           }, icon: const Icon(Icons.print)),
                           
                     IconButton(
@@ -311,6 +333,7 @@ Future<void> getrecord () async {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(color: Colors.orange),
                   ),
+                  
                   hintText: "Quantite",
                   labelText: "Quantite"),
             ),
@@ -333,38 +356,31 @@ Future<void> getrecord () async {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                    ElevatedButton(
-                onPressed: () {
-                   if(quantite.text=="" || prixu.text=="" || selectedname==""){
-                    sms("Entrer tous les champs");
-                  }
-                  else{
-                    setState(() {
-                    //   print(selectedname);
-                    //   clients.add(Achatdetail(
-                    //   codeproduit: int.parse(selectedname),
-                    //   quantite: int.parse(quantite.text),
-                    //   prixu: double.parse(prixu.text) ,
-                    //   codevente: int.parse(widget.code),
-                    // ));
-                    });                    
-                  }
-                  // Efface les champs après l'ajout
-                  // codeproduit.clear();
-                  // quantite.clear();
-                  // prixu.clear();
-                },
-                child: const Text('Ajouter un autre produit'),
-              ),
               const SizedBox(width: 15,),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    savadatas();
+                    if(quantite.text.isEmpty || prixu.text.isEmpty){
+                      sms("Completer tous les champs");
+                    }
+                    else{
+                      // int t=in
+                      if (int.parse(quantite.text)<=0 || int.parse(prixu.text)<=0){
+                        sms("Entrer des valeurs superieurs");
+                      }
+                      else{
+                        savadatas();
+                        setState(() {
+                          _data=fetchdata();
+                        });
+                      }
+                      
+                    }
+                    
                   });         
                   
                 },
-                child: const Text('Acheter'),
+                child: const Text('Vendre'),
               ),
                 ],
               ),
@@ -401,10 +417,10 @@ Future<void> getrecord () async {
                     columnSpacing: 20,
                     horizontalMargin: 20,
                     columns: const [
-                    DataColumn(label: Text("Produit",style: TextStyle(fontWeight: FontWeight.bold),)),
-                    DataColumn(label: Text("Quantite",style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text("Prix",style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text("PT",style: TextStyle(fontWeight: FontWeight.bold)))
+                    DataColumn(label: Text("Produit",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Color.fromARGB(255, 150, 138, 6)),)),
+                    DataColumn(label: Text("Quantite",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Color.fromARGB(255, 150, 138, 6)))),
+                    DataColumn(label: Text("Prix",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Color.fromARGB(255, 150, 138, 6)))),
+                    DataColumn(label: Text("PT",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Color.fromARGB(255, 150, 138, 6))))
                     ], rows: data.map((item) => DataRow(cells: [
                       DataCell(Text(item['produit'])),
                       DataCell(Text(item['quantite'].toString())),
@@ -427,193 +443,5 @@ Future<void> getrecord () async {
       ),
     );
   
-  }
-}
-// ignore: must_be_immutable
-class ModalShow extends StatefulWidget {
-  String idachat='';
-  ModalShow(this.idachat,{super.key});
-
-  @override
-  State<ModalShow> createState() => _ModalShowState();
-}
-
-class _ModalShowState extends State<ModalShow> {
-  TextEditingController codevente = TextEditingController();
-  TextEditingController codeproduit = TextEditingController();
-  TextEditingController quantite = TextEditingController();  
-  TextEditingController prixu = TextEditingController();
-  List<Achatdetail> clients = [];
-  Map<String, dynamic> once={};
-  String client="";
-  
-String adress=currentip();
-  List data=[];
-  var selectedname;
-  var selectedvalue;
-   var seleccat;
-
-   Future<void> getrecord () async {
-   var url="http://$adress/API_VENTE/PRODUIT/getproduit.php";  
-  try{
-    var response=await http.get(Uri.parse(url));
-    setState(() {
-      data=jsonDecode(response.body);
-      print(data);
-    });    
-  }
-  catch (e){
-    print(e);
-  }
- }
-
-@override
-  void initState() {
-    // TODO: implement initState
-    getrecord();
-    super.initState();
-  }
-  Future <void> savadatas(List d) async{  
-    var url="http://$adress/API_VENTE/DETAILAPPROVISIONNEMENT/insertdetailapprovisionnement.php";
-    Uri ulr=Uri.parse(url);
-
-await http.post(ulr,body: {
-  "datadetail":d
-});
-    // Map <String, String> body = {"name":txtnom.text,"pass":pass.text,"roles":role.text};
-}
-void sms(String ms){
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(ms),
-    duration: const Duration(seconds: 1),
-    ));
-}
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-        children: [
-          Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            
-            const Text("Ajouter plus de detail",style: TextStyle(
-              fontSize: 18,fontWeight: FontWeight.w300
-            ),),
-            const SizedBox(height: 25,),
-            DropdownButtonFormField(
-            // hint: const Text("Select client"),
-            items:data.map((list){
-                return DropdownMenuItem(   
-                  value: list["id_produit"],
-                  child: Text(list["designation"]),
-                  );
-          }
-          ).toList(),
-          //onChanged: onChanged,
-          
-          value: selectedvalue,          
-          icon: const Icon(Icons.arrow_drop_down_circle),
-          decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.production_quantity_limits),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.orange),
-                  ),
-                  hintText: "Produit",
-                  labelText: "Produit"),
-          onChanged: (value){
-            selectedvalue=value;
-            // client=selectedvalue;
-            setState(() {
-              selectedname=value.toString();
-            });
-            
-            print(selectedname);
-          },
-              ),
-              const SizedBox(height: 10),
-            TextField(
-              controller: quantite,
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.production_quantity_limits_rounded),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.orange),
-                  ),
-                  hintText: "Quantite",
-                  labelText: "Quantite"),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: prixu,
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.monetization_on),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.orange),
-                  ),
-                  hintText: "Prix de l'article",
-                  labelText: "Prix"),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(right:5.0,left: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                    ElevatedButton(
-                onPressed: () {
-                   if(quantite.text=="" || prixu.text=="" || selectedname==""){
-                    sms("Entrer tous les champs");
-                  }
-                  else{
-                    setState(() {
-                      print(selectedname);
-                      clients.add(Achatdetail(
-                      codeproduit: int.parse(selectedname),
-                      quantite: int.parse(quantite.text),
-                      prixu: double.parse(prixu.text) ,
-                      codevente: int.parse(widget.idachat),
-                    ));
-                    });
-                    
-                  }
-                  // Efface les champs après l'ajout
-                  // codeproduit.clear();
-                  quantite.clear();
-                  prixu.clear();
-                },
-                child: const Text('Ajouter un autre produit'),
-              ),
-              const SizedBox(width: 15,),
-              ElevatedButton(
-                onPressed: () {
-                  // Affiche les données au format JSON
-                  // print(clients.map((client) => client.toJson()).toList());
-                  // print(clients);
-                  
-                  List j=clients.map((e) => e.toJson()).toList();
-                  print(j);
-                  savadatas(j);
-                  
-                  
-                },
-                child: const Text('Acheter'),
-              ),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 20),
-            
-          ],
-        
-        ),
-      ),
-    
-        ],
-    );
-    
   }
 }

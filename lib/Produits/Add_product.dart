@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 //import 'package:image_picker/image_picker.dart';
@@ -8,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:stocktrue/Paternars.dart';
 import 'package:stocktrue/ip.dart';
+
+import '../main.dart';
 class Addproduct extends StatefulWidget {
   const Addproduct({super.key});
 
@@ -23,7 +26,6 @@ var selectedname;
 String adress=currentip();
 List d=[];
   Future<void> savadatas() async {
-    
     try {
       var url = "http://$adress/API_VENTE/PRODUIT/insertproduit.php";
       Uri ulr = Uri.parse(url);
@@ -204,7 +206,23 @@ List d=[];
                   const SizedBox(height: 10,),
                   ElevatedButton(
                         onPressed: () {
-                          savadatas();
+                          // nom.clear();
+                          if(nom.text.isEmpty){
+                            bar("Completer tous les champs");
+                          }
+                          else{
+                              savadatas();
+                          // setState(() {
+                          //   nom.clear();
+                          //   _image=null;
+                          // });
+                          
+                            Navigator.pushAndRemoveUntil(
+            context, 
+            CupertinoPageRoute(builder: (context)=>const Homescreen()), (Route<dynamic>route)=>false,);
+                          }
+                          
+                          
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

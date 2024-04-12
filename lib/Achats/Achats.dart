@@ -116,7 +116,9 @@ Future<void> getrecord () async {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: const [IconButton(onPressed: null, icon: Icon(Icons.info_outline))],
+        actions:  [IconButton(onPressed: (){
+          showAboutDialog(context: context);
+        }, icon: const Icon(Icons.info_outline))],
         title: const Text("FourniStore",textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold
@@ -261,7 +263,6 @@ Future<void> getrecord () async {
                 SlidableAction(onPressed: (context){
                   //showAdaptiveDialog(context: context, builder: (context)=>Center(child: Text("Erreur de modification")));
                 showDialog(context: context, builder: (context)=>CupertinoAlertDialog(//   AlertDialog.adaptive(
-                    
                     title: const Text("Voulez-vous vraiment supprimer ?"),
                     actions: [
                           Row(
@@ -269,6 +270,9 @@ Future<void> getrecord () async {
                             children: [TextButton(onPressed: (){
                                   print(data[index]["id_approvisionnement"]);
                                   delrecord(data[index]["id_approvisionnement"].toString());
+                                  setState(() {
+                             Navigator.pop(context);
+                          });
                               }, child: const Text("Effectuer"))
                             ],
                           )
@@ -279,7 +283,8 @@ Future<void> getrecord () async {
                 foregroundColor: Colors.red,
                 icon: Icons.delete,
                 )
-              ]),
+              ]
+              ),
               child: Padding(
                 padding:  const EdgeInsets.symmetric(vertical: 2.0),
                 child: Container(                                                        
@@ -432,7 +437,9 @@ Future<void> getrecord () async {
                         ),
                         onPressed: () {
                           savadatas();
-                          () => Navigator.pop(context);
+                          setState(() {
+                             Navigator.pop(context);
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           // elevation: 0,

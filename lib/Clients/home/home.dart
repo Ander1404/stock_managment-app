@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../ip.dart';
 import '../Hero/hero_details.dart';
 import '../Hero/hero_info.dart';
@@ -31,11 +33,11 @@ class _HomeState extends State<Home> {
   String status='';
 Future<void> delrecord(String id) async {
     try{
-      var url="http://$adress/API_VENTE/FOURNISSEUR/deletefournisseur.php";
+      var url="http://$adress/API_VENTE/CLIENT/deleteclient.php";
       
       var result=await http.post(Uri.parse(url),
       body: {
-        "id":id.toString()
+        "id_client":id.toString()
       }
       );
       var reponse=jsonDecode(result.body);
@@ -54,6 +56,8 @@ Future<void> delrecord(String id) async {
       print(e);
     }
    }
+
+
 Future<void> getrecord () async {
    var url="http://$adress/API_VENTE/CLIENT/getclient.php";
   
@@ -85,8 +89,6 @@ body: {
   }     );
 
 var repoe=jsonDecode(res.body);
-      //var reponse=jsonDecode(res.body);
-      //print(reponse.toString());
       print('object');
       getrecord();
       if(repoe["message"]=="Mise à jour réussie."){
@@ -125,135 +127,171 @@ print(e);
         
           itemCount: data.length,
           itemBuilder: (context,index){
-            return Card(              
-              color: Colors.white,  
-            elevation: 2,
-            // shadowColor:,            
-              margin: const EdgeInsets.all(5),
-              child: ListTile(                
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
-                },
-                title: Text(data[index]["noms"]),
-                subtitle: Text(data[index]["telephone"]),
-                trailing:  IconButton(
-                  onPressed: (){
-                      showModalBottomSheet(context: context, builder: (context)=>ListView(
-      padding: const EdgeInsets.only(right: 25,left: 25),
-      children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                       TextField(
-                          controller: nom,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.person_2_outlined),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.orange),
-                              ),
-                              hintText: "Nom du client", labelText: "Nom")),
-                      const SizedBox(height: 20),
-                       TextField(
-                          controller: adresse,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.place_outlined),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.orange),
-                              ),
-                              hintText: "Adresse du client",
-                              labelText: "Adresse")),
-                              const SizedBox(height: 20),
-                       TextField(
-                          controller: phone,
-                          keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(    
-                            prefixIcon: Icon(Icons.phone),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.orange),
-                              ),                        
-                              hintText: "Contact du client",
-                              labelText: "Contact")),
-                              const SizedBox(height: 20),
-                       TextField(
-                          controller: mail,                          
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.email_outlined),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(color: Colors.orange),
-                              ),
-                            // border: OutlineInputBorder(
-                              
-                            // ),
-                              hintText: "Mail du client",
-                              labelText: "mail")
-                              ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ElevatedButton.icon(
-                       icon: const Icon(
-                          Icons.save_alt_outlined,
-                          color: Colors.black,
-                        ),
-                        label: const Text(
-                          "Confirmer",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onPressed: ()
-                        {
-                          update();
-                          getrecord();
-                          // setState(() {
-                          //   getrecord();
-                          //   // Navigator.pop(context);
-                          // });
-                          
-                          Navigator.pop(context);
-                          
-                          },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: const Color.fromARGB(255, 240, 184, 138),
-                          fixedSize: const Size(300, 45),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                      ),
+            return Slidable(
+              endActionPane: ActionPane(motion: const ScrollMotion(),
+              children: [
+                SlidableAction(onPressed: (context){
+                  showDialog(context: context, builder: (context)=>CupertinoAlertDialog(//   AlertDialog.adaptive(
+                    title: const Text("Voulez-vous vraiment supprimer ?"),
+                    actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [TextButton(onPressed: (){
+                                  print(data[index]["id_approvisionnement"]);
+                                  delrecord(data[index]["id_client"].toString());
+                                  setState(() {
+                                    Navigator.pop(context);
+                                  });
+                              }, child: const Text("Effectuer"))
+                            ],
+                          )
                     ],
-                  
-    )
-                       
-                      );
+                   )
+                   );
+                   
+                },
+                foregroundColor: Colors.red,
+                icon: Icons.delete,)
+              ],
+              ),
+              child: Card(              
+                color: Colors.white,  
+              elevation: 2,
+              // shadowColor:,            
+                margin: const EdgeInsets.all(5),
+                child: ListTile(                
+                  onTap: (){
+              
+                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>HeroDetails(items: controller.items[index])));
+                  },
+                  title: Text(data[index]["noms"]),
+                  subtitle: Text(data[index]["telephone"]),
+                  trailing:  IconButton(
+                    onPressed: (){
                       setState(() {
-                        getrecord();
+                        nom.text=data[index]["noms"];
+                        adresse.text= data[index]["adresse"];
+                        mail.text=  data[index]["mail"];
+                        phone.text=  data[index]["telephone"];
+                        code.text=  data[index]["id_fournisseur"].toString();
                       });
+                        showModalBottomSheet(context: context, builder: (context)=>ListView(
+                    padding: const EdgeInsets.only(right: 25,left: 25),
+                    children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                         TextField(
+                            controller: nom,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.person_2_outlined),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                                hintText: "Nom du client", labelText: "Nom")),
+                        const SizedBox(height: 20),
+                         TextField(
+                            controller: adresse,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.place_outlined),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                                hintText: "Adresse du client",
+                                labelText: "Adresse")),
+                                const SizedBox(height: 20),
+                         TextField(
+                            controller: phone,
+                            keyboardType: TextInputType.phone,
+                            decoration: const InputDecoration(    
+                              prefixIcon: Icon(Icons.phone),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),                        
+                                hintText: "Contact du client",
+                                labelText: "Contact")),
+                                const SizedBox(height: 20),
+                         TextField(
+                            controller: mail,                          
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.email_outlined),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                              // border: OutlineInputBorder(
+                                
+                              // ),
+                                hintText: "Mail du client",
+                                labelText: "mail")
+                                ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ElevatedButton.icon(
+                         icon: const Icon(
+                            Icons.save_alt_outlined,
+                            color: Colors.black,
+                          ),
+                          label: const Text(
+                            "Confirmer",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: ()
+                          {
+                            update();
+                            getrecord();
+                            // setState(() {
+                            //   getrecord();
+                            //   // Navigator.pop(context);
+                            // });
+                            
+                            Navigator.pop(context);
+                            
+                            },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: const Color.fromARGB(255, 240, 184, 138),
+                            fixedSize: const Size(300, 45),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                        ),
+                      ],
                     
-                  }, 
-                  icon: const Icon(Icons.edit_note_outlined)),
-                leading: Hero(
-                  //Tag should be different
-                  //having identical tag will not work in hero animation
-                  tag: data[index]["id_client"],
-                  child: const CircleAvatar(
-                    radius: 30,
-                    child: Icon(Icons.person_2_outlined,),
+                  )
+                         
+                        );
+                        setState(() {
+                          getrecord();
+                        });
+                      
+                    }, 
+                    icon: const Icon(Icons.edit_note_outlined)),
+                  leading: Hero(
+                    //Tag should be different
+                    //having identical tag will not work in hero animation
+                    tag: data[index]["id_client"],
+                    child: const CircleAvatar(
+                      radius: 30,
+                      child: Icon(Icons.person_2_outlined,),
+                    ),
+                    
                   ),
-                  
                 ),
               ),
+            
             );
           }),
       
       
       floatingActionButton: FloatingActionButton(
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddClient()));        
-            
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddClient()));
           },
           disabledElevation: 10,
           child: const Icon(Icons.add),

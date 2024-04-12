@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stocktrue/Achats/Achats.dart';
 import 'package:stocktrue/Colors.dart';
 import 'package:stocktrue/Paternars.dart';
@@ -9,6 +10,11 @@ import 'package:stocktrue/Ventes/vente.dart';
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp( const MyApp());
 }
 
