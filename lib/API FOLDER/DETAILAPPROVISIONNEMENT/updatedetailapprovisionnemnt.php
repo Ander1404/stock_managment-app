@@ -1,0 +1,47 @@
+
+<?php
+include('../CONNEXION/connexion.php');
+
+// Vérification de l'existence des paramètres POST
+if (
+    isset($_POST["id_detailApprovionnement"]) &&
+    isset($_POST["approvisionnement_id"]) &&
+    isset($_POST["produit_id"]) &&
+    isset($_POST["quantite"]) &&
+    isset($_POST["prixu"])
+) {
+    // Assignation des valeurs des paramètres POST
+    $id_detailApprovionnement = $_POST["id_detailApprovionnement"];
+    $approvisionnement_id = $_POST["approvisionnement_id"];
+    $produit_id = $_POST["produit_id"];
+    $quantite = $_POST["quantite"];
+    $prixu = $_POST["prixu"];
+    try {
+        $sql = "CALL InsertOrUpdateDetailApprovisionnement (:id_detailApprovionnement,:approvisionnement_id,:produit_id,:quantite,:prixu)";
+        $stmt = $dbconnection->prepare($sql);
+        // Vérification de la préparation de la requête
+        if ($stmt === false) {
+            throw new Exception("Erreur de préparation de la requête.");
+        }
+        // Liaison des paramètres
+        $stmt->bindParam(':id_detailApprovionnement', $id_detailApprovionnement);
+        $stmt->bindParam(':approvisionnement_id', $approvisionnement_id);
+        $stmt->bindParam(':produit_id', $produit_id);
+        $stmt->bindParam(':quantite', $quantite);
+        $stmt->bindParam(':prixu', $prixu);
+
+        // Exécution de la requête
+        if ($stmt->execute()) {
+            echo json_encode(array('message' => 'Mise à jour réussie.'));
+        } else {
+            throw new Exception("Échec de l'exécution de la requête.");
+        }
+    } catch (Exception $e) {
+        echo json_encode(array('error' => $e->getMessage()));
+    }
+} else {
+    echo json_encode(array('error' => 'Paramètres manquants.'));
+}
+?>
+
+

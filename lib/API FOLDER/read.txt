@@ -1,0 +1,2 @@
+- Add the folder to the to the xamp(htdocs)/wamp(www) 
+- import the db file
