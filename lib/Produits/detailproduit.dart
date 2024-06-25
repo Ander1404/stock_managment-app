@@ -29,7 +29,7 @@ class _DetailproduitState extends State<Detailproduit> {
   //COmment 
   
   File? _image;
-  late Future<List<Map<String,dynamic>>> _data;
+  // late Future<List<Map<String,dynamic>>> _data;
   // final Future<List<Map<String,dynamic>>> _data2= await fetchdata();
   // String adress=currentip();
   Future<List<Map<String,dynamic>>> fetchdata () async {
